@@ -12,15 +12,20 @@
             --card-bg: #ffffff;
             --text-main: #202124;
             --text-muted: #5f6368;
+            --danger-color: #ea4335;
         }
 
-        body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            background-color: var(--bg-color); 
-            color: var(--text-main); 
-            max-width: 800px; 
-            margin: 0 auto; 
-            padding: 20px; 
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
             line-height: 1.6;
         }
 
@@ -31,10 +36,18 @@
             margin-bottom: 30px;
         }
 
-        h2 { color: var(--primary-color); margin-bottom: 10px; }
-        p.subtitle { color: var(--text-muted); font-size: 0.9em; }
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
 
-        .search-container { 
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        .search-container {
             position: sticky;
             top: 15px;
             z-index: 1000;
@@ -45,23 +58,23 @@
             align-items: center;
         }
 
-        input[type="text"] { 
+        input[type="text"] {
             flex-grow: 1;
-            padding: 15px 25px; 
-            font-size: 18px; 
-            border: 1px solid #dfe1e5; 
-            border-radius: 30px; 
-            box-sizing: border-box; 
-            outline: none; 
-            transition: box-shadow 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px 25px;
+            font-size: 18px;
+            border: 1px solid #dfe1e5;
+            border-radius: 30px;
+            outline: none;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background: #fff;
         }
 
-        input[type="text"]:focus { 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        input[type="text"]:focus {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            border-color: var(--accent-color);
         }
 
-        /* Mikrofon tugmasi stili */
         .mic-btn {
             background-color: var(--accent-color);
             border: none;
@@ -78,13 +91,17 @@
         }
 
         .mic-btn:hover {
-            background-color: #1557b0;
             transform: scale(1.05);
         }
 
-        /* Mikrofon yozayotgandagi puls animatsiyasi */
+        .mic-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .mic-btn.recording {
-            background-color: #ea4335;
+            background-color: var(--danger-color);
             animation: pulse 1.5s infinite;
         }
 
@@ -96,53 +113,59 @@
 
         .results-info {
             margin: 15px 0;
-            font-size: 0.9em;
+            font-size: 0.95em;
             color: var(--text-muted);
             padding-left: 10px;
         }
 
-        .results-container { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px; 
+        .results-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        .qa-card { 
-            background: var(--card-bg); 
-            padding: 20px; 
-            border-radius: 12px; 
+        .qa-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
             border: 1px solid #dadce0;
-            transition: border 0.2s;
+            transition: border 0.2s ease;
         }
 
         .qa-card:hover {
             border-color: var(--accent-color);
         }
 
-        .question { 
-            font-weight: 600; 
-            font-size: 17px; 
-            color: var(--accent-color); 
+        .question {
+            font-weight: 600;
+            font-size: 17px;
+            color: var(--accent-color);
             margin-bottom: 10px;
             display: flex;
             gap: 10px;
         }
 
-        .question::before { content: "S:"; color: #9aa0a6; }
+        .question::before {
+            content: "S:";
+            color: #9aa0a6;
+            flex-shrink: 0;
+        }
 
-        .answer { 
-            font-size: 16px; 
-            color: var(--text-main); 
+        .answer {
+            font-size: 16px;
+            color: var(--text-main);
             padding-left: 25px;
             border-top: 1px solid #f1f3f4;
             padding-top: 10px;
         }
 
-        .highlight { 
-            background-color: #fff2ac; 
+        .highlight {
+            background-color: #fff2ac;
             font-weight: bold;
+            padding: 0 2px;
+            border-radius: 3px;
         }
-        
+
         .no-results {
             text-align: center;
             color: var(--text-muted);
@@ -165,8 +188,20 @@
     </div>
 
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Kalit so'zni yozing..." oninput="searchQA()" autofocus>
-        <button id="micBtn" class="mic-btn" onclick="toggleSpeechRecognition()" title="Ovozli qidiruv">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Kalit so'zni yozing..."
+            oninput="searchQA()"
+            autofocus
+        >
+        <button
+            id="micBtn"
+            class="mic-btn"
+            onclick="toggleSpeechRecognition()"
+            title="Ovozli qidiruv"
+            type="button"
+        >
             <svg focusable="false" viewBox="0 0 24 24" width="28" height="28" fill="white">
                 <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"></path>
                 <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"></path>
@@ -175,513 +210,62 @@
     </div>
 
     <div class="results-info" id="countInfo">Baza tayyor. Qidiruvni boshlang.</div>
-
     <div class="results-container" id="results"></div>
     <div class="no-results" id="noResults">Kechirasiz, bunday kalit so'z topilmadi.</div>
 
     <script>
         const qaData = [
-{q: "Jadval 1-jadvalda keltirilgan qiyosiy tahlilingizning eng muhim xulosasi nima?", a: "Asosiy xulosa shundan iboratki, texnik savodxonlik axborot madaniyati uchun faqat poydevor bo‘lib xizmat qiladi, lekin uning o‘rnini bosa olmaydi. Biz ta’limda faqat tugmalarni bosishni emas, balki fikrlashni o‘rgatishimiz kerakligini isbotladik."},
-{q: "2019-yil 31-dekabrdagi 1059-sonli qarorning ishingizga qanday aloqasi bor?", a: "Bu Uzluksiz ma’naviy tarbiya konsepsiyasi bo‘lib, unda belgilangan yoshlarda axloqiy-ma’naviy immunitetni kuchaytirish vazifasi bizning tadqiqotimizning negizini tashkil qiladi"},
-{q: "2-band Affektiv ko‘rsatkichlarni (2-band)  ball bilan emas, sifat bahosi bilan o‘lchashingizning sababi nimada?", a: "Insonning ichki kechinmalari, vijdoni va axloqiy munosabatini raqamlar bilan (masalan, 7 balli vijdon deb) o‘lchash pedagogik jihatdan to‘g‘ri emas. Shuning uchun biz ijobiy, betaraf yoki salbiy kabi sifat o‘lchovlaridan foydalandik."},
-{q: "365 nafar -Nima uchun aynan 365 nafar o‘quvchi tanlandi? Bu son reprezentativlikni ta’minlaydimi?", a: "Ha, 365 nafar o‘quvchi tanlanishi pedagogik tajriba-sinov ishlari uchun yetarli miqdor hisoblanadi va olingan natijalarning ilmiy asosli ekanligini ta’minlashga xizmat qiladi."},
-{q: "6-bandda shaxsga ta'siri bo‘yicha farqni tushuntiring. Savodxonlik ijtimoiy ongni shakllantirmaydimi?", a: "Axborot savodxonligi ko‘proq kognitiv (bilish) jarayonlar, ya’ni mantiq va xotira bilan ishlaydi. Ijtimoiy va axloqiy ong esa faqat axborot madaniyati orqali shakllanadi, chunki bu darajada shaxs axborotning jamiyatga ta’siri uchun mas’uliyatni his qiladi."},
-{q: "Aaxborot iste’moli madaniyati atamasini tanladingiz?", a: "Chunki raqamli transformatsiya davrida global media strategiyalar yoshlar ongiga kuchli ta’sir o‘tkazmoqda. Bu madaniyatni shakllantirish yoshlarni manipulyatsiyadan himoya qilishning yagona yo‘lidir."},
-{q: "Abduraxmonov ta’rifida ijtimoiy jihatlar kam yoritilgan deb topdingiz?", a: "Chunki ushbu ta’rifda asosiy e’tibor shaxsning ichki axloqiy mas’uliyatiga qaratilgan. Ammo bugungi kunda axborot iste’moli faqat shaxsiy jarayon emas, u ijtimoiy tarmoqlardagi guruhlar, virtual jamoalar va global kommunikatsiya bilan bog‘liq. Biz o‘z ishimizda ushbu ijtimoiy aloqalarni ham tizimlashtirdik."},
-{q: "Adabiyotlar Tadqiqotingizda foydalanilgan adabiyotlar xronologiyasi qaysi davrlarni o‘z ichiga oladi?", a: "Asosan so‘nggi 5-10 yillik (2018–2022 yillar va undan keyingi) eng dolzarb tadqiqotlar tahlil qilingan."},
-{q: "Affektiv komponent diagnostikasida o‘quvchilarning qanday xususiyatlari o‘rganilgan?", a: "Axborotga bo‘lgan shaxsiy munosabati va shubhali ma’lumotlarga nisbatan ehtiyotkorlik darajasi."},
-{q: "Affektiv komponent ishingizda qanday rol o‘ynaydi?", a: "Bu — yoshlarning axborotga nisbatan hissiy munosabati va uni qabul qilishdagi ruhiy holatidir."},
-{q: "Affektiv komponent yangilikda qanday amaliy ahamiyatga ega?", a: "Bu yoshlarning manipulyativ va emotsional axborotlarga (feyklarga) berilmasligi, axborotni qabul qilishda hissiyotlarni jilovlay olish mexanizmini tushuntiradi."},
-{q: "Affektiv komponentni rivojlantirish nega muhim deb hisoblaysiz?", a: "Chunki yoshlar axborotni ko‘pincha mantiq bilan emas, his-tuyg‘u bilan qabul qilishadi. Affektiv rivojlanish — bu axborot ta’siridagi emotsiyalarni boshqara olishdir."},
-{q: "Affektiv yondashuvning ishonchlilikdagi o‘rni nimada?", a: "O‘quvchilarning axborotga nisbatan hissiy barqarorligi va manipulyatsiyaga berilmasligi diagnostika testlari orqali ishonchli o‘lchandi."},
-{q: "Agar ta’lim shu asosda tashkil etilsa, o‘quvchi yoshlarda qanday komponentlar uyg‘un rivojlanadi?", a: "Axborot madaniyatining kognitiv (bilish), affektiv (qadriyatli) va amaliy (faol) komponentlari uyg‘un rivojlanadi."},
-{q: "Aksiologik yondashuvning (mahalliy tadqiqotlar) axborot madaniyatidagi o‘rni nimadan iborat?", a: "Bu axborotga qadriyat sifatida qarashdir. Ya’ni, axborot shunchaki ma’lumot emas, balki shaxsning ma’naviy olamini boyituvchi yoki unga zarar yetkazuvchi kuchdir. Aksiologiya bu yerda yaxshi va yomon axborotni ajratuvchi o‘lchov vazifasini o‘taydi."},
-{q: "Amaliy foydalanish mexanizmlari cheklangan degan xulosangizni qanday asoslaysiz?", a: "Ko‘pgina olimlar nima qilish kerakligini aytishgan (nazariya), lekin darsliklarda buni qanday amalga oshirish (metodika) bo‘yicha aniq algoritmlar bermagan. Bizning ishimiz aynan shu bo‘shliqni to‘ldiradi."},
-{q: "Amaliy mexanizmlar predmetning qaysi qismini tashkil qiladi?", a: "Axborotni ongli qabul qilishdan boshlab, uni baholashgacha bo‘lgan jarayonni amalga oshirish uchun qo‘llaniladigan amaliy harakatlar ketma-ketligini."},
-{q: "Amaliy natijalaringiz raqamli xavfsizlikka qanchalik hissa qo‘shadi?", a: "Biz ishlab chiqqan didaktik topshiriqlar o‘quvchilarda kiberxavflarni (fishing, bulling) tanib olish va ulardan himoyalanish ko‘nikmasini shakllantiradi."},
-{q: "Amaliy natijalaringizni darsdan tashqari faoliyatda qanday ishlatish mumkin?", a: "Ishlab chiqilgan ssenariylar va didaktik topshiriqlar Axborot soatlari yoki to‘garak mashg‘ulotlari uchun tayyor qo‘llanma bo‘lib xizmat qiladi."},
-{q: "Amaliy-ma’rifiy faoliyat vositalariga misol keltira olasizmi?", a: "Bularga media-loyihalar, ijtimoiy tarmoqlardagi o‘quv guruhlari va sinfdan tashqari o‘tkaziladigan axborot haftaliklari kabi vositalar kiradi."},
-{q: "Amaliyotga joriy etishda nima uchun adaptiv yondashuv zarur deb hisoblaysiz?", a: "Chunki o‘quvchilarning yoshi, individual ehtiyojlari, dezinformatsiyaga (yolg‘on ma’lumotga) moyillik omillari va raqamli tajribasi turlicha bo‘ladi. Shuning uchun metodika ularga moslashuvchan bo‘lishi shart."},
-{q: "Aniq miqdoriy farqlarni aniqlash deganda nima nazarda tutiladi?", a: "Nazorat va tajriba guruhlaridagi o‘quvchilarning bilim darajasi o‘rtasidagi farqning tasodifiy emas, balki bizning metodikamiz natijasi ekanligini matematik isbotlash."},
-{q: "AQSH, Finlyandiya va Yaponiya - Nima uchun aynan AQSH, Finlyandiya va Yaponiya tajribasini tanladingiz?", a: "Chunki bu davlatlar mediasavodxonlik va raqamli xavfsizlik bo‘yicha dunyoda eng ilg‘or ta’lim modellari va yuqori ko‘rsatkichlarga ega."},
-{q: "AQSHda mediasavodxonlik qaysi fan tarkibida o‘rgatiladi?", a: "AQSH tajribasida mediasavodxonlik fuqarolik ta’limining (Civic Education) ajralmas tarkibiy qismiga aylantirilgan."},
-{q: "Axborot bilan ishlash madaniyatini rivojlantirish ta'limda qanday vazifa sifatida namoyon bo'ladi?", a: "Uni rivojlantirish ta'limning muhim didaktik vazifasi sifatida namoyon bo'ladi."},
-{q: "Axborot etikasi bo‘yicha qanday amaliy ish shakllari o‘quvchilarda ma’naviy chegaralarni anglashni chuqurlashtiradi?", a: "Debatlar, dilemma-keyslar va treninglar yoshlarda axborot faoliyatining ma’naviy chegaralarini anglashni chuqurlashtiradi."},
-{q: "Axborot etikasi usuli o‘quvchiga qanday muvozanatni anglashga yordam beradi?", a: "Inson qadr-qimmati, shaxsiy ma’lumot, so‘z erkinligi va jamiyat manfaati o‘rtasidagi muvozanatni anglashga yordam beradi."},
-{q: "Axborot etikasiga asoslangan metodika nimalarni rivojlantirishga qaratilgan?", a: "Axborot bilan ishlash jarayonida axloqiy qaror qabul qilish, shaxsiy javobgarlik va ijtimoiy munosabat madaniyatini rivojlantirishga qaratilgan."},
-{q: "Axborot faoliyatining ijodiy yo‘naltirilishi tanqidiy fikrlashdan tashqari yana nimalarni rivojlantiradi?", a: "Axborotni qayta tahlil qilish va unga ma’naviy mazmun berish qobiliyatini rivojlantiradi."},
-{q: "Axborot filtratsiyasi metodikasi o‘quvchida qanday to‘siqni shakllantiradi?", a: "U axborot oqimidagi ortiqcha, ishonchsiz yoki manipulyativ ma’lumotlarni ajratuvchi ongli to‘siqni shakllantiradi."},
-{q: "Axborot filtratsiyasi metodikasi qanday qadamlardan iborat algoritmni yaratadi?", a: "Manba ishonchliligini tekshirish, ma’lumotni boshqa manbalar bilan solishtirish va axborot xavflarini aniqlash kabi qadamlardan iborat algoritmni yaratadi."},
-{q: "Axborot immuniteti deganda nimani tushunasiz?", a: "Bu — yoshlarning feyk xabarlar, manipulyatsiya va psixologik xurujlarni tanib olish va ularga qarshi tura olish qobiliyatidir."},
-{q: "Axborot iste’moli faoliyatining kognitiv-axloqiy tarkibi nima?", a: "Bu axborotni nafaqat aql bilan tahlil qilish (kognitiv), balki uni milliy va umuminsoniy qadriyatlar (axloqiy) prizmasidan o‘tkazish birligidir."},
-{q: "Axborot iste’moli madaniyati shakllangan o‘quvchi qanday sifatlarga ega bo‘ladi?", a: "U axborotni manbasini tekshiradi, feykni ajratadi, raqamli etikaga amal qiladi va axborotdan ma’naviy-ma’rifiy maqsadlarda foydalanadi."},
-{q: "Axborot iste’moli madaniyati tushunchasining shakllanish tarixini qanday o‘rgandingiz?", a: "Biz an’anaviy kutubxona madaniyatidan boshlab, kompyuter savodxonligi, media-savodxonlik va nihoyat bugungi kundagi raqamli madaniyat bosqichlarini qiyosiy tahlil qildik. Har bir davrning talabi va ta’limga ta’siri birinchi bobda tizimli yoritilgan."},
-{q: "Axborot iste’moli madaniyatini kompleks sifat deb ataganingizda nimalarni nazarda tutdingiz?", a: "Bu sifat uchta ustunda turadi: Texnik ustun (qidirish va ishlov berish); Intellektual ustun (tanqidiy tahlil va saralash); Axloqiy ustun (ma’naviy baholash va raqamli etika). Faqatgina shu uchovining birlashishi shaxsda haqiqiy axborot iste’moli madaniyatini hosil qiladi."},
-{q: "Axborot iste’moli madaniyatini konseptual qayta asoslash deganda nimani nazarda tutyapsiz?", a: "Ilgari bu masala faqat texnik savodxonlik sifatida ko‘rilgan bo‘lsa, biz uni kognitiv, affektiv va metakognitiv komponentlar birligida, zamonaviy pedagogik paradigmalar bilan uyg‘un holda yaxlit tizim sifatida yangitdan asoslab berdik."},
-{q: "Axborot iste’moli madaniyatini rivojlantirish faqat texnik ko‘nikmalarni egallashdan iboratmi?", a: "Yo‘q, u nafaqat texnik ko‘nikmalarni egallash, balki shaxsning axborotga munosabatini ongli darajada tarbiyalashni ham o‘z ichiga oladi."},
-{q: "Axborot iste'moli madaniyatini shakllantirish nima bilan uzviy bog‘liqligi ochib berilgan?", a: "Uning zamonaviy ta’limdagi ahamiyati hamda tarbiya jarayoni bilan uzviy bog‘liqligi ochib berilgan."},
-{q: "Axborot iste'moli madaniyati mavzusini tanladingiz? Bu masalani tadqiq etish bugungi kunda nima uchun zarur?", a: "Bugungi raqamli transformatsiya va global media strategiyalari kuchaygan davrda, yoshlarni turli psixologik ta'sirlar, feyk xabarlar va manipulyatsiyalardan asrash davlat ta'lim siyosatining ustuvor yo'nalishiga aylandi. Mavzuni tanlashimga asosiy sabab — yoshlarda axborotni tanqidiy tahlil qilish va axloqiy qabul qilish ko'nikmasini (immunitetni) rivojlantirish orqali milliy barqarorlikni ta'minlashga hissa qo'shishdir."},
-{q: "Axborot iste'moli madaniyati va mediasavodxonlik tushunchalarini yonma-yon ishlatyapsiz. Bularning farqi bormi yoki bir xil narsami?", a: "Mediasavodxonlik — bu axborotni texnik qidirish, topish va tahlil qilish ko'nikmasidir. Axborot iste'moli madaniyati esa kengroq tushuncha bo'lib, u o'z ichiga nafaqat savodxonlikni, balki raqamli etika, axloqiy mas'uliyat va axborotdan ongli, ma'lum maqsad yo'lida foydalanish madaniyatini ham qamrab oladi."},
-{q: "Axborot iste'moli madaniyatini milliy barqarorlik sharti deb atagansiz. Nima uchun bu masala shunchalik yuqori strategik darajaga ko'tarildi?", a: "Sababi — global media strategiyalarining yoshlar ongiga ta'siri keskin oshganidir. Agar yoshlarda feyk xabarlar va manipulyatsiyaga qarshi axborot immuniteti shakllanmasa, bu jamiyatda tushunmovchiliklar keltirib chiqarishi va barqarorlikka rahna solishi mumkin. Shu bois, Finlyandiya kabi davlatlarda bu hattoki demokratiyani himoya qilish vositasi sifatida ko'rilmoqda."},
-{q: "Axborot madaniyati darajasini aniqlashda nima uchun aynan 4 ta yo‘nalishni (Kognitiv, Affektiv, Ijtimoiy-amaliy, Refleksiv) tanladingiz?", a: "Chunki axborot madaniyati faqat bilim (kognitiv) emas, balki munosabat (affektiv), harakat (amaliy) va o‘z-o‘zini nazorat qilish (refleksiv) uyg‘unligidir. Faqat shu to‘rt yo‘nalish birlashganda shaxsning axborot muhitidagi to‘liq qiyofasini ko‘rish mumkin."},
-{q: "Axborot mas’uliyati tushunchasi matnda qanday talqin qilinadi?", a: "U shaxsning axborotni qabul qilish va tarqatish jarayonida ijtimoiy va axloqiy oqibatlarni anglagan holda ish tutishi, ya'ni ongli munosabati sifatida talqin qilinadi."},
-{q: "Axborot xavfsizligi tahdidlarini aniqlashdan maqsad nima?", a: "Yoshlarni kiberbulling, feyk xabarlar va g‘oyaviy xurujlardan himoya qilishning pedagogik yo‘llarini topish."},
-{q: "Axborot xavfsizligi va axborot madaniyati tushunchalarining iyerarxiyasi jadvalda qanday?", a: "Axborot madaniyati — kengroq tushuncha. Xavfsizlik uning tarkibiy qismi bo‘lib, madaniyat shakllangan joyda xavfsizlik ichki ehtiyojga aylanadi."},
-{q: "Axborot xurujlari deganda aynan nimani tushunasiz?", a: "Bu yoshlar ongini manipulyatsiya qilishga, ularning qadriyatlarini o‘zgartirishga yo‘naltirilgan tashqi va ichki zararli media ta’sirlardir."},
-{q: "Axborotni ijtimoiy-ma’naviy nuqtai nazardan baholash nima?", a: "Ma’lumotning jamiyat uchun foydasi yoki zarari, shuningdek, bizning ma’naviyatimizga mos kelishini aniqlash."},
-{q: "Axborotni ma’naviy-ma’rifiy nuqtai nazardan baholashni ta’limning asosiy vazifasi deb hisoblaysiz?", a: "Globalizatsiya davrida yoshlarning ongini axborot xurujlaridan faqat taqiqlash bilan himoya qilib bo‘lmaydi. Eng samarali yo‘l — ularning ichki filtrini, ya’ni ma’naviy-axloqiy baholash qobiliyatini rivojlantirishdir. Bu bizning milliy xavfsizligimiz va tarbiya tizimimizning ustuvor yo‘nalishidir."},
-{q: "Axborotni ongli qabul qilish qanday amalga oshiriladi?", a: "Yoshlarning har qanday ma’lumotga tanqidiy ko‘z bilan qarashi va uning ishonchliligini tekshirishi orqali."},
-{q: "Axborotni vizual usulda o‘zlashtirish nima degani?", a: "Murakkab axborotlarni infografikalar, diagrammalar va video-vizuallar orqali tahlil qilish va tushunish metodikasi."},
-{q: "Axborotni ongli qabul qilish qanday o‘rgatiladi?", a: "Bu jarayon tanqidiy fikrlash, mediasavodxonlik va axborot xavfsizligi qoidalarini o‘z ichiga olgan metodik-didaktik yondashuvlar orqali amalga oshiriladi."},
-{q: "Axborotni saralash predmetga alohida kiritilgan?", a: "Chunki axborot ummonida kerakli va foydali ma’lumotni keraksiz (shovqin) va zararlisidan ajratib olish — iste’mol madaniyatining asosiy bosqichidir."},
-{q: "Axborotni tahlil qilish predmetda qanday o‘rganiladi?", a: "Ma’lumotning ichki mantiqiy bog‘liqligi, dalillarning asosiyligi va feyk elementlarning bor-yo‘qligini tekshirish metodikasi sifatida."},
-{q: "Axborot-psixologik omillar yoshlarga qanday ta’sir qiladi?", a: "Ular yoshlarning fikrlash doirasini cheklashi yoki aksincha, axborotni to‘g‘ri qabul qilish orqali intellektini oshirishi mumkin."},
-{q: "Axborot-psixologik xavfsizlik va axborot iste’moli madaniyati o‘rtasida qanday bog‘liqlik bor?", a: "Axborot-psixologik xavfsizlik — bu himoya holati, iste’mol madaniyati esa — shu xavfsizlikni ta’minlashga xizmat qiluvchi shaxsiy sifat va ko‘nikmalar majmuidir."},
-{q: "Axloqiy barqarorlik axborot iste'moli uchun muhim omil hisoblanadi?", a: "Chunki u o'quvchiga tashqi axborot xurujlari va manipulyatsiyalari sharoitida o'z ma'naviy dunyosini saqlab qolish va to'g'ri qaror qabul qilish imkonini beradi."},
-{q: "Axloqiy komponent deganda nimani tushunasiz?", a: "Axborotdan foydalanishda ma’naviy me’yorlarga amal qilish, birovning haqiga (mualliflikka) rioya qilish va zararli ma’lumotlarni rad etishdir."},
-{q: "Axloqiy mas’uliyat birinchi o‘rinda turishi kerak?", a: "Chunki axloqsiz intellekt — jamiyat uchun xavfli axborot qurolini (masalan, kiberhujum yoki kiberbulling) yaratishi mumkin."},
-{q: "Axloqiy qabul qilish nima uchun muhim?", a: "Faqat texnik tahlil yetarli emas. Yoshlar axborotni ijtimoiy mas’uliyat nuqtai nazaridan, ya’ni boshqalarga zarar yetkazmaslik va ma’naviy me’yorlar asosida qabul qilishlari kerak."},
-{q: "Axloqiy-intellektual yo‘nalishning bugungi global feyklar davridagi o‘rni qanday?", a: "Bu yo‘nalish yoshlarga yolg‘on ma’lumotlarni nafaqat mantiq bilan (intellekt), balki vijdon va mas’uliyat bilan (axloq) baholashni o‘rgatadi."},
-{q: "Axmedov talaba yoshlar bo‘yicha qanday yechimlar bergan?", a: "U talabalarning internetdan foydalanishidagi axborot-psixologik xavfsizligini ta’minlash va xavflarni kamaytirish yo‘llarini ko‘rsatgan."},
-{q: "Baholarni normal taqsimotga ega deb hisobladingiz?", a: "Chunki tanlanma hajmi (365 kishi) yetarlicha katta va pedagogik o‘lchovlarda (o‘quvchilar bilimi) ko‘rsatkichlar odatda markaziy nuqta atrofida zichlashadi. Bu statistik tahlillarni amalga oshirish uchun zaruriy shartdir."},
-{q: "Baholash mexizimi ishingizda qanday ahamiyatga ega?", a: "Axborotni nafaqat tushunish, balki uning ijtimoiy-axloqiy qiymatini, bizning qadriyatlarimizga mosligini aniqlash mezoni sifatida."},
-{q: "Bakingem (Avstraliya) axborot iste’molini nima bilan bog‘laydi?", a: "U axborot iste’moli madaniyatining yoshlar dunyoqarashi va fuqarolik pozitsiyasiga ta’sirini ijtimoiy tahlil qilgan."},
-{q: "Birinchi bob xulosasiga ko‘ra, axborot iste’moli madaniyati yoshlar hayotida qanday rol o‘ynaydi?", a: "U yoshlar ongida qaror qabul qilish, xulq-atvor va dunyoqarashga ta’sir etuvchi asosiy omil rolini o‘ynaydi."},
-{q: "Birinchi bobini aynan nazariy-metodologik asoslarga bag‘ishladingiz?", a: "Har qanday metodik taklif mustahkam nazariy poydevorga ega bo‘lishi shart. Birinchi bobda biz axborot iste’moli madaniyati tushunchasining evolyutsiyasini, uning zamonaviy pedagogikadagi o‘rnini va psixologik asoslarini aniqlashtirib oldik. Bu keyingi boblarda taklif etiladigan model va metodikaning ilmiy oqlanishi uchun xizmat qiladi."},
-{q: "Birinchi yangiligingizda metakognitiv komponent haqida yozgansiz. U kognitivdan nima bilan farq qiladi?", a: "Kognitiv komponent — bu bilim va tahlil bo‘lsa, metakognitiv komponent — bu o‘quvchining o‘z bilish jarayonini nazorat qilishi, ya’ni men bu axborotni nega o‘qiyapman, u menga nima beradi? deb o‘ziga savol bera olish va o‘z intellektual harakatini boshqarish qobiliyatidir."},
-{q: "Bob xulosasida global axborot muhitiga oid qanday salbiy tahdidlar tahlil qilingan?", a: "Axborot oqimining keskin ortishi, feyk va manipulyativ axborot tahdidlari hamda raqamli muhitdagi axloqiy mas’uliyat muammolari tahlil qilingan."},
-{q: "Bob yakunida metodikangizning qanday funksional imkoniyatlari haqida xulosa berganiz?", a: "Metodikamiz yoshlarning axborot faolligini oshirish, ongli qaror qabul qilish, axloqiy-ma’rifiy baholash va mas’uliyatli iste’molchini shakllantirish imkoniyatiga ega."},
-{q: "Bob yakunida o‘qituvchilar faoliyati uchun qanday xulosaga keldingiz?", a: "Yaratilgan metodik-didaktik ta’minot o‘quvchilarda axborot iste’moli madaniyatining barqaror shakllanishiga xizmat qilishi va ta’lim jarayoniga tatbiq etish uchun metodik jihatdan yetarlicha asoslangani ilmiy tasdiqlandi."},
-{q: "Bobda metodikaning amaliy joriy etilishi bo‘yicha yana qanday elementlar ishlab chiqilgan?", a: "Faoliyat turlari, topshiriqlar, didaktik vositalar va ta’lim muhitiga qo‘yilgan pedagogik talablar tizimi ishlab chiqilgan."},
-{q: "Bosh maqsadi nima?", a: "Yoshlarda axborot iste’moli madaniyatini rivojlantirishga qaratilgan metodik-didaktik tizimni takomillashtirish bo‘yicha ilmiy asoslangan taklif va tavsiyalar ishlab chiqish."},
-{q: "Bu jadval dissertatsiyangizning keyingi (tajriba) qismlariga qanday bog‘lanadi?", a: "Birinchi bobda aniqlangan ushbu nazariy kamchiliklar (texnologik bo‘shliq, amaliy mexanizm yo‘qligi) ikkinchi bobda biz taklif etayotgan modelning asosi bo‘lib xizmat qiladi."},
-{q: "Bu tarbiyaviy jarayon virtual makonda qanday shaxsni shakllantirishga qaratilgan?", a: "Virtual makonda faol, ijtimoiy mas’ul va axloqiy barqaror shaxsni tarbiyalashga qaratilgan."},
-{q: "Bu yo‘nalishda asosiy e’tibor axborotni qanday amallardan o'tkazishga qaratilgan?", a: "Asosiy e’tibor axborotni ongli tanlash, tahlil qilish, qayta ishlash va ijtimoiy foydali faoliyatga yo‘naltirishga qaratilgan."},
-{q: "Davlat siyosatida mediasavodxonlikni integratsiya qilish deganda nima nazarda tutilgan?", a: "Mediasavodxonlik elementlarini mavjud fanlar (ona tili, tarix, tarbiya va h.k.) tarkibiga singdirish va alohida o‘quv dasturlari yaratish"},
-{q: "Diagnostik usullardan so‘rovnoma kimlar o‘rtasida o‘tkazildi?", a: "So‘rovnomalar tajriba-sinov ishlari jalb etilgan 365 nafar o‘quvchi hamda ularning o‘qituvchilari o‘rtasida o‘tkazildi."},
-{q: "Diagnostika uslublari deganda nimalar nazarda tutilgan?", a: "Yoshlarning axborot madaniyati darajasini (past, o‘rta, yuqori) aniqlashga xizmat qiluvchi testlar, psixologik so‘rovnomalar va vaziyatli topshiriqlar."},
-{q: "Didaktik ta’minot tarkibiga yana nimalar kiradi?", a: "O‘quvchilarga tarqatiladigan didaktik kartochkalar, ishchi daftar va axborotni saralash bo‘yicha algoritmlar."},
-{q: "Digital citizenship (raqamli fuqarolik) va axborot etikasi o‘rtasidagi chegara qayerda?", a: "Raqamli fuqarolik ko‘proq huquq va imkoniyatlar (masalan, e-davlat xizmatlari) bilan bog‘liq. Axborot etikasi esa virtual muloqotda andisha, birovning haqini hurmat qilish va rostgo‘ylik kabi axloqiy qoidalarni o‘z ichiga oladi."},
-{q: "Dispersiya tahlili nima uchun kerak bo‘ldi?", a: "Tajriba guruhidagi natijalarning qanchalik bir xilligini va biz qo‘llagan metodikaning turli sharoitlarda (turli maktablarda) barqaror natija berishini tekshirish uchun."},
-{q: "Dissertatsiya materiallarida ta'kidlanishicha, axborot bilan ishlash madaniyati o'quv faoliyatining qaysi jarayonlariga chuqur kirib borgan?", a: "U o'quv faoliyatining barcha bosqichlarida bilim olish, fikrlash va mustaqil xulosa chiqarish jarayonlariga chuqur kirib borgan."},
-{q: "Dissertatsiyada keltirilgan tarbiyaviy yo‘nalishlar aynan nimalarni shakllantirishga xizmat qiladi?", a: "Ijtimoiy mas’uliyat, axloqiy barqarorlik va axborotga ma’naviy munosabatni shakllantirishga xizmat qiladi."},
-{q: "Dissertatsiyada qanday statistik parametrlar hisoblab chiqildi?", a: "Tajriba yakunidagi holat uchun o‘rtacha kvadratik chetlanish, tanlanma dispersiya, variatsiya ko‘rsatkichlari, Styudentning tanlanma mezoni, erkinlik darajasi va ishonchli chetlanishlar hisoblab chiqildi."},
-{q: "Dolzarb- Shuncha xalqaro tadqiqotlar bor ekan, nima uchun sizning ishingiz dolzarb hisoblanadi?", a: "Chunki xorijiy tadqiqotlar bu muammoni alohida-alohida (psixologik, texnik yoki ijtimoiy) o‘rgangan. Bizning ishimizda esa bular tarbiya, ta’lim va sinfdan tashqari faoliyatni birlashtirgan yaxlit tizim sifatida o‘rganilgan."},
-{q: "Estetik did - Nima uchun Tarkibiy qismlar (3-band)da axborot madaniyatiga estetik didni kiritdingiz?", a: "Chunki axborot iste’moli madaniyati shakllangan shaxs sifatsiz, axlat (informatsion shovqin) darajasidagi vizual yoki matnli kontentni rad etadi. Estetik did axborotni iste'mol qilishda yuqori madaniy filtr vazifasini o‘taydi."},
-{q: "Faktcheking bo‘yicha qanday didaktik topshiriqlar ishlab chiqdingiz?", a: "Masalan, o‘quvchilarga bir xil voqea haqidagi uch xil (feyk, yarim haqiqat va rasmiy) xabarni berib, ularning ishonchliligini tekshirish bo‘yicha algoritmlar va mashqlar."},
-{q: "Faktcheking elementlarini pedagogik jarayonga qanday olib kirdingiz?", a: "Biz faktchekingni shunchaki jurnalistik usul emas, balki o‘quvchilarning darsda ma’lumotlarni mustaqil tekshirish ko‘nikmasini rivojlantiruvchi didaktik mashqlar ko‘rinishida joriy etdik."},
-{q: "Faktcheking ko‘nikmasini o‘quvchilarda shakllantirishning pedagogik ahamiyati nimada?", a: "Bu o‘quvchiga axborotning ishonchliligini mustaqil tekshirish imkonini beradi va uni manipulyatsiyalar qurboniga aylanishdan asraydi."},
-{q: "Fanlararo integratsiya loyihalari nima?", a: "Bu axborot madaniyatini tarix, biologiya, informatika kabi turli fanlar kesimida birgalikda shakllantirishga qaratilgan amaliy ish rejalaridir."},
-{q: "Fanlararo integratsiya (4-band) axborot madaniyatini oshirishda qanday rol o‘ynaydi?", a: "Axborot iste’moli faqat bitta fanga tegishli emas. Mediata’lim, tarix, adabiyot va texnologiya fanlari birlashganda o‘quvchi axborotning nafaqat texnik tomonini, balki uning ijtimoiy-tarixiy va axloqiy qirralarini ham chuqur anglaydi."},
-{q: "Faoliyatga asoslangan yondashuv ishonchlilikni qanday ta’minlaydi?", a: "Bu yondashuv o‘quvchining axborotni passiv emas, balki amaliy harakatlar (saralash, tahlil qilish) orqali o‘zlashtirishini ta’minlaydi, bu esa natijalarning hayotiyligini isbotlaydi."},
-{q: "Filtratsiya metodikasining natijasida o‘quvchida qanday odat shakllanadi?", a: "Yoshlarda faktcheking qobiliyati — har qanday ma’lumotni tanqidiy tekshirish odati shakllanadi."},
-{q: "Finlyandiya tajribasini keltirgansiz. Ularda bu masala qanday hal qilingan?", a: "Finlyandiyada axborot savodxonligi demokratiyani himoya qiluvchi asosiy kompetensiya sifatida maktab ta’limiga kiritilgan."},
-{q: "Finlyandiya, Singapur va AQSH tajribalarini keltirgansiz. Aynan shu davlatlar amaliyotidan qanday xulosalar oldingiz va ular nima bilan ajralib turadi?", a: "Bu davlatlar axborot iste'moli madaniyatini strategik darajaga olib chiqqani bilan ajralib turadi. Masalan, Finlyandiyada axborot savodxonligi demokratiyani himoya qiluvchi vosita hisoblansa, Singapurda Digital Literacy Programme orqali o'quvchilarga axborotni xavfsiz iste'mol qilish maxsus o'rgatiladi. AQSHda esa bu fuqarolik ta'limining bir qismidir. Biz bu tajribalardan yoshlarni axborot xurujlariga qarshi tayyorlashni majburiy kompetensiya sifatida ko'rish g'oyasini asos qilib oldik."},
-{q: "Funksional struktura deganda joriy etishda nima tushunildi?", a: "Bu axborot iste’moli madaniyatini shakllantirish jarayonining barcha bosqichlarini (maqsad, vosita, metod, natija) amalda qanday ishlashini ko'rsatuvchi tizimdir."},
-{q: "Fyodorov-Rossiyalik olim A.V.Fyodorovning media-ta’lim sohasidagi asosiy hissasi nimadan iborat?", a: " U media-ta’lim va media savodxonlikni yoshlar tarbiyasiga integratsiya qilish hamda axborotni tanqidiy tahlil qilish texnologiyalarini ishlab chiqqan."},
-{q: "Gendinaning shaxsning axborot madaniyati nazariyasi ishingizga qanday ta’sir qildi? ", a: "Gendina axborot savodxonligi, manba tanlash va faktcheking ko‘nikmalarini shakllantirishning konseptual modelini bergan. Biz bu modelni o'zimizning metodik tizimimiz uchun nazariy asos sifatida oldik."},
-{q: "Gipotezadagi axloqiy va refleksiv yondashuv nimanining ta’minlanishiga xizmat qiladi?", a: "Axborotni ma’naviy qiymatlar tizimi bilan uyg‘unlashtirishni ta’minlaydi."},
-{q: "Gipotezangiz amalga oshsa, o‘quvchining ta’limdagi roli qanday o‘zgaradi?", a: "O‘quvchi passiv qabul qiluvchi holatidan chiqib, faol anglovchi va ijtimoiy ma’no yaratuvchi sub’yekt sifatida shakllanadi."},
-{q: "Gipotezangizda axborot faoliyatini qanday jarayon sifatida tashkil etish taklif qilingan?", a: "Ijodiy, axloqiy va refleksiv jarayon sifatida tashkil etish taklif qilingan."},
-{q: "Gipotezani ilmiy jihatdan qanday qilib mustahkam asoslab berdingiz?", a: "Nazariy model va strategik yondashuvlarni ilg‘or metodologik yo‘nalishlar (raqamli etika, faktcheking va b.) bilan uyg‘unlashtirish orqali gipotezamizning to‘g‘riligini isbotladik."},
-{q: "Global media strategiyalar deganda nimalar nazarda tutilgan?", a: "Bu — turli siyosiy va g‘oyaviy markazlar tomonidan yoshlar ongiga maqsadli ravishda yo‘naltirilgan axborot xurujlari va tashviqot usullaridir."},
-{q: "Hududlar tanlanishida (Samarqand, Sirdaryo, Qashqadaryo) qanday mantiq bor?", a: "Turli viloyatlarning chekka tumanlari (Qo‘shrabot, Xovos, Chiroqchi) tanlangani tadqiqot natijalarining xolisligini va respublika miqyosida bir xil samara berishini isbotlash uchun xizmat qiladi."},
-{q: "Ijtimoiy-amaliy faollikni (3-band) qanday qilib Portfolio tahlili orqali aniqlash mumkin?", a: "O‘quvchining mediatahlil darslaridagi ishtiroki, tayyorlagan infografikalari, ijtimoiy tarmoqdagi foydali tashabbuslari portfolio sifatida yig‘iladi va bu uning axborotni ijtimoiy foyda uchun qo‘llay olish darajasini ko‘rsatadi."},
-{q: "Ikkinchi bobda pedagogik faoliyatga oid qanday masalalar tadqiq etilgan?", a: "Axborot iste’moli madaniyatini oshirishga qaratilgan pedagogik faoliyatni tashkil etish va boshqarishning usul va yo‘llari tadqiq etilgan."},
-{q: "Ikkinchi bobning keyingi qismlarida metodikaning qaysi asoslari ishlab chiqilgan?", a: "Metodikaning mazmuniy asoslari, uni amaliyotga joriy etish tartibi va mexanizmlari ishlab chiqilgan."},
-{q: "Ikkinchi yangiligingizda sotsiomadaniy jihat nima uchun muhim?", a: "Chunki axborot iste’moli faqat shaxsiy ish emas, u jamiyatdagi madaniy muhit va milliy-ma’naviy omillar bilan chambarchas bog‘liq. Biz aynan shu bog‘liqlikni tizimli tahlil qildik."},
-{q: "Ilmiy mezonlar va indikatorlarni shakllantirishda nimalarga tayanidingiz?", a: "UNESCO va Yevropa Ittifoqining mediasavodxonlik standartlarini milliy ta’lim tizimimiz talablari bilan sintez qildik."},
-{q: "Ilmiy yangiligingizning amaliy ahamiyati nimada?", a: "Ishlab chiqilgan metodik model, tavsiyalar va filtrlash mexanizmlarining bevosita ta’lim amaliyotiga tatbiq etilishi mumkinligida."},
-{q: "Ilmiy yangiligingizning nazariy ahamiyati nimada?", a: "Axborot iste’moli madaniyatining kognitiv-metakognitiv komponentlari va neyropedagogik asoslarining ilmiy jihatdan qayta konseptuallashtirilganida."},
-{q: "Ilmiy-nazariy asoslanganlik ishonchlilikning birinchi sharti sifatida nega qo‘yilgan?", a: "Chunki nazariy poydevori mustahkam bo‘lmagan har qanday amaliy yechim uzoq muddatli va barqaror natija bera olmaydi."},
-{q: "Information behavior studies (axborot xulq-atvori) yo‘nalishi bizga nima beradi?", a: "Bu yoshlarning nega aynan ma’lum bir saytlarga kirishi, nega feyklarga ishonishi va axborotni qanday qidirishini (psixologik mexanizmlarni) tushunishga yordam beradi."},
-{q: "Information consumption (iste’mol) so‘zi pedagogika uchun biroz iqtisodiy tuyulmaydimi?", a: "To‘g‘ri, lekin biz bu yerda axborotni shunchaki ishlatish emas, balki uni o‘zlashtirish, hazm qilish va shaxsiy sifatga aylantirish jarayonini nazarda tutganmiz."},
-{q: "Integrativ ssenariylar deganda qanday ishlanmalarni tushunamiz?", a: "Bu mediasavodxonlik va faktcheking elementlarini mavjud fanlar (ona tili, tarix, tarbiya) ssenariysiga (dars ishlanmasiga) singdirilgan tayyor dars loyihalari."},
-{q: "Integrativ ssenariylar ishingizda qanday o‘rin tutadi? ", a: "Bu ssenariylar bir nechta fanni birlashtirgan holda o‘quvchiga axborot bilan ishlashni amaliy o‘rgatishga xizmat qiladi."},
-{q: "Integrativ yondashuv ishonchlilikka qanday hissa qo‘shadi?", a: "Axborot madaniyatini faqat bir fan emas, balki fanlararo bog‘liqlikda o‘rganish natijalarning har tomonlama xolisligini ta’minlaydi."},
-{q: "Integrativ yondashuv tadqiqotingizda qanday qo‘llanildi?", a: "Axborot iste’moli madaniyatini shakllantirishda pedagogika, psixologiya va axborot texnologiyalari fanlarining o‘zaro bog‘liqligi integratsiya qilindi."},
-{q: "Ishingizda faktchekingning ilmiy metodologiyasi qanday berilgan?", a: "Faktcheking jurnalistik uslubdan pedagogik texnologiyaga, ya’ni o‘quvchining tanqidiy tahlil ko‘nikmasini shakllantiruvchi metodga aylantirildi."},
-{q: "Ishingizda integrativ ssenariylarning amaliy foydasi qanday?", a: "O‘qituvchilar bu ssenariylar yordamida mediasavodxonlik darslarini boshqa fanlar mazmuni bilan oson bog‘lab o‘ta oladilar."},
-{q: "Ishizuka -Yaponiyalik H.Ishizuka mediasavodxonlikni qanday joriy etishni taklif qiladi?", a: "U raqamli madaniyatni maktab ta’limiga integratsiya qilishning aniq didaktik mexanizmlarini taklif etgan."},
-{q: "Ishlab chiqqan baholash mezonlari o‘qituvchiga qanday yordam beradi?", a: "O‘qituvchi har bir o‘quvchining axborotni saralash va tahlil qilish darajasini aniq miqdoriy va sifat ko‘rsatkichlari bilan baholay oladi."},
-{q: "Ishlab chiqqan materiallaringizni o‘qituvchi o‘z darsiga qanday integratsiya qilishi mumkin?", a: "Biz taklif etgan integrativ ssenariylardan foydalanib, darsning 5-10 daqiqasini mediasavodxonlik mashqlariga ajratish orqali."},
-{q: "Ishlab chiqqan tavsiyalaringiz qayerda qo‘llaniladi?", a: "Umumiy o‘rta ta’lim maktablari, akademik litseylar va OTMlarning o‘quv hamda tarbiyaviy jarayonlarida."},
-{q: "ITD-1-148 loyihasining nomi nima va u sizning mavzuingizga qanchalik yaqin?", a: "Loyiha “O‘qituvchilar kasbiy kompetentligini rivojlantirish texnologiyasi” deb nomlanadi. O‘qituvchilarning axborot iste’moli madaniyati ularning kasbiy kompetentligining ajralmas qismi bo‘lgani uchun bizning natijalarimiz loyihaga to‘la mos tushgan."},
-{q: "Ivanov va T.V.Ivanovalar media-ta’limni qanday baholashadi?", a: "Ular buni zamonaviy yoshlarni tarbiyalashdagi eng muhim tendensiya deb hisoblaydilar va uning didaktik yo‘nalishlarini belgilab berganlar."},
-{q: "Jadvalda keltirilgan cheklangan tomonlarni aniqlashdan ko‘zlangan ilmiy maqsad nima edi?", a: "Maqsad — mavjud ilmiy adabiyotlarda to‘liq yoritilmagan jihatlarni (masalan, neyropedagogik filtr yoki kognitiv himoya) ko‘rsatish va o‘z tadqiqotimizning yangiligini isbotlashdir."},
-{q: "Jadvaldagi kognitiv barqarorlik qanday pedagogik usullar bilan ta’minlanadi?", a: "Axborot bilan ishlashda diqqatni jamlash, ikkilamchi manbani tekshirish va mantiqiy xatolarni topish kabi kognitiv mashqlar orqali."},
-{q: "Jadvaldagi Universal va milliy paradigmalarni birlashtirish g‘oyasi gipotezangizda qanday turibdi?", a: "Bu bizning asosiy gipotezamizdir: agar yoshlarda xalqaro standartlardagi tanqidiy fikrlash (universal) va milliy ma’naviyat (milliy) uyg‘unlashsa, ular har qanday axborot muhitida barqaror bo‘la oladilar."},
-{q: "Jadvalingizning 1-bandida Mohiyati bo‘yicha farqni qanday izohlaysiz?", a: "Axborot savodxonligi — bu instrumental (asbob-uskunaga oid) ko‘nikma. Ya'ni, axborotni topish va qayta ishlash texnikasini bilish. Axborot madaniyati esa aksiologik (qadriyatga oid) tushuncha bo'lib, u axborotni milliy va umuminsoniy qadriyatlar prizmasidan o‘tkazishni anglatadi."},
-{q: "Jadvalning Ta’limda qo‘llanilishi bandidagi ma’naviy filtr mashqlari amalda qanday bajariladi?", a: "O‘quvchilarga turli ziddiyatli xabarlar beriladi va ulardan ushbu xabarni milliy qadriyatlar, odob-axloq va davlat qonunlari nuqtai nazaridan tahlil qilish, so‘ngra qabul qilish yoki rad etish qarorini asoslash so‘raladi."},
-{q: "Jadvalning 7-bandi — O‘zaro bog‘liqlik qismining xulosasi nima?", a: "Xulosa shuki: savodxonlik — vosita, madaniyat — maqsad. Savodxonliksiz madaniyat shakllanmaydi (chunki texnikani bilish kerak), lekin madaniyatsiz savodxonlik xavfli bo‘lishi mumkin (masalan, kiberjinoyatchilar juda savodxon, lekin madaniyatsiz)."},
-{q: "Jadvalning oxirgi bandidagi madaniy barqaror shaxs portreti qanday?", a: "Bu — global axborot dunyosida o‘zligini yo‘qotmaydigan, har qanday ma’lumotni tahlil qila oladigan, raqamli texnologiyalarni mukammal biladigan, lekin ulardan faqat ezgulik yo‘lida foydalanadigan inson."},
-{q: "Jamoaviy hamkorlik muhitida yoshlar axborotni qanday o‘rganadilar?", a: "Loyihalar va guruhlarda ishlash orqali axborotni birgalikda tahlil qilish va jamoaviy faktcheking qilish ko‘nikmalarini egallaydilar."},
-{q: "Janubiy Koreya tajribasida neyrokognitiv metodlar qo'llanilishi haqida yozgansiz. Sizning tadqiqotingizda ham shunday murakkab tahlillar bormi yoki siz qaysi jihatga ko'proq urg'u berdingiz?", a: "Janubiy Koreya tajribasi axborotni qabul qilishning ichki, ruhiy mexanizmlari muhimligini ko'rsatadi. Men o'z tadqiqotimda aynan shu tajribaga tayanib, yoshlarning axborotni tushunish, tahlil qilish va ma'naviy-ma'rifiy maqsadlarda ongli foydalanishini ta'minlovchi metodik-didaktik tizim yaratishga asosiy urg'uni qaratdim. "},
-{q: "Janubiy Koreyada dezinformatsiyani ajratish qanday metodlar bilan tahlil qilinmoqda?", a: "U yerda yoshlarning yolg‘on xabarni ajratish qobiliyati psixolingvistik va neyrokognitiv (miya faoliyati bilan bog‘liq) metodlar bilan o‘rganilmoqda."},
-{q: "Jonson-Kanadalik N.Jonsonning pedagogik modeli nimaga qaratilgan?", a: "Uning modeli yoshlarni kiberxavflardan asrash va shaxsiy ma’lumotlarni himoya qilish bo‘yicha pedagogik choralarni o‘z ichiga oladi."},
-{q: "Joriy etish hujjatlari natijalaringizning haqqoniyligini qanday isbotlaydi?", a: "Nufuzli OTM (TDPU) va davlat media tuzilmasi (O‘zMTRK) tomonidan berilgan rasmiy tasdiqnomalar natijalarning amaliyotda yuqori samaradorlikka ega ekanini ko‘rsatadi."},
-{q: "Joriy etish jarayonida o‘quvchi sub’yektligi masalasi qanday hisobga olindi?", a: "Metodik-didaktik modelimiz o‘quvchining shaxsiy ehtiyojlari va pedagogik maqsadlarga moslashtirilgan holda amaliyotga tatbiq etildi."},
-{q: "Kastels bo‘yicha axborotni qayta ishlash shaxsning ijtimoiy mavqeiga qanday ta’sir qiladi?", a: "Axborotni sifatli qayta ishlay oladigan shaxs raqamli jamiyatda yuqori ijtimoiy kapitalga va ta’sir kuchiga ega bo‘ladi."},
-{q: "Kastelsning ta’rifidagi ijodiy natija yaratish (creative output) g‘oyasi sizning tadqiqotingizda qanday qo‘llanildi?", a: "Biz yoshlarni faqat axborotni yeydigan (iste’molchi) emas, balki tahlil natijasida foydali kontent yarata oladigan ijodkor sifatida tarbiyalash metodikasini ishlab chiqdik."},
-{q: "Kelgusida joriy etish ko'lamini kengaytirish rejangiz bormi?", a: "Ha, ushbu metodik tizimni respublikadagi barcha umumta'lim maktablarining darsdan tashqari faoliyatiga va raqamli ta'lim platformalariga kengroq joriy etish ko'zda tutilgan."},
-{q: "Kognitiv komponent nima degani?", a: "Bu — yoshlarning axborotni qabul qilish, tushunish va aqlan qayta ishlash bilan bog‘liq bilim va ko‘nikmalari."},
-{q: "Kognitiv va affektiv neyropedagogika yo‘nalishining ishingizdagi ilmiy o‘rni qanday?", a: "Bu yo‘nalish yoshlarning axborotni qabul qilishdagi aqliy (kognitiv) va hissiy (affektiv) jarayonlarini tushunish hamda ularni boshqarish metodikasini ilmiy asoslashga xizmat qiladi."},
-{q: "Kognitiv-affektiv-axloqiy tarkiblar deganda nimani nazarda tutyapsiz?", a: "Bu axborotni qabul qilishdagi aqliy tahlil (kognitiv), unga nisbatan hissiy munosabat (affektiv) va uning to‘g‘riligini axloqiy o‘lchovlar asosida baholash birligidir."},
-{q: "Komissiya a’zosi: Sizning amaliy natijangizni ertaga maktabda ishlatsa bo‘ladimi? desa nima deysiz?", a: "Albatta, chunki bizda dars ssenariylaridan tortib, baholash mezonlari va multimedia resurslarigacha bo‘lgan tayyor metodik majmua (keys) shakllantirilgan."},
-{q: "Kompleks tadqiqot- Nima uchun siz yoshlar axborot iste’moli madaniyatini kompleks tadqiqot deb atayapsiz? ", a: "Chunki u bir vaqtning o‘zida pedagogika, psixologiya, axborot texnologiyalari va etika (odobnoma) fanlari tutashgan nuqtadagi muammodir."},
-{q: "Korrelyatsiya tahlili orqali nima aniqlandi?", a: "Taklif etilgan metodik yechimlar va o‘quvchilarning axborot iste’moli madaniyati darajasi o‘rtasidagi uzviy bog‘liqlik darajasi aniqlandi."},
-{q: "Kreativ media faoliyat deganda yoshlar nima qilishi kerak?", a: "Ular nafaqat iste’molchi, balki ijtimoiy tarmoqlarda foydali, ma’rifiy va vatanparvarlik ruhidagi kontent yaratuvchi media-volontyor bo‘lishlari lozim."},
-{q: "Kuzatish usulida aynan nima kuzatildi?", a: "O‘quvchilarning dars va sinfdan tashqari mashg‘ulotlarda axborot manbalari bilan ishlash jarayoni, feyk xabarlarga bo‘lgan munosabati va tanqidiy fikrlash darajasi kuzatildi."},
-{q: "Ma’lumotlarni qayta ishlashda qaysi dasturiy ta’minot qo‘llanildi?", a: "Ma’lumotlar MS Excel yoki SPSS dasturlari yordamida qayta ishlandi."},
-{q: "Ma’naviy-axloqiy immunitetga urg‘u berilyapti?", a: "Sababi, har qanday texnik filtrdan ko‘ra insonning ichki axloqiy filtri (immuniteti) axborot xurujlariga qarshi eng samarali himoya hisoblanadi."},
-{q: "Ma’naviy-axloqiy nuqtai nazardan baholash amalda qanday ko‘rinadi?", a: "O‘quvchi axborotni tarqatishdan oldin uning jamiyatga foyda yoki zarar keltirishi, milliy qadriyatlarga muvofiqligi haqida o‘ylashiga qaratilgan amaliy mashqlar orqali."},
-{q: "Mahalliy olimlarimiz (J. Hojiboyev, A. Safarov va b.) ilgari surgan ma’naviy immunitet tushunchasi jadvalda qanday aks etgan?", a: "Bu tushuncha jadvalning Asosiy g‘oyalar va Pedagogik natija qismlarida o‘z aksini topgan. Immunitet — bu tashqi yot g‘oyalarga nisbatan shaxsning ichki barqarorligi bo‘lib, u axborot madaniyatining oliy bosqichidir."},
-{q: "Maklyuenning Axborot muhiti inson ongini qayta yaratadi degan g‘oyasi bugungi kunda qanchalik dolzarb?", a: "Juda dolzarb. Maklyuen aytganidek, media — bu inson a’zolarining davomidir. Bugun smartfon va internet yoshlarning fikrlash tarzini o‘zgartirib yubordi. Bizning vazifamiz — bu qayta yaratilish jarayonini ma’naviy nazorat ostiga olishdir."},
-{q: "Mamlakatimizda axborot iste’moli madaniyatini shakllantirish nima uchun strategik vazifa darajasiga ko‘tarildi?", a: "Chunki raqamli transformatsiya va global media oqimi kuchaygan sharoitda, yoshlar ongini axborot xurujlaridan himoya qilish milliy xavfsizlik va ma’naviy barqarorlikning asosiy shartiga aylandi."},
-{q: "Manba ishonchliligini baholash uchun qanday amaliy vosita taklif etdingiz?", a: "Manbani tekshirish bo‘yicha maxsus nazorat ro‘yxati (check-list) va metodik ko‘rsatmalar ishlab chiqildi."},
-{q: "Maqsadingizda aynan metodik-didaktik tizimga urg‘u berilgan?", a: "Chunki yoshlarda bu madaniyatni shakllantirish uchun nafaqat nazariya, balki ta’lim berish usullari va vositalari (didaktika) birlashgan yaxlit tizim zarur."},
-{q: "Maqsadingizga erishish uchun qaysi vazifa eng muhim hisoblanadi?", a: "Hammasi muhim, lekin metodik-didaktik modelni ishlab chiqish (3-vazifa) tadqiqotning amaliy yuragi hisoblanadi."},
-{q: "Markaziy Osiyo olimlarining yondashuvlarida qanday umumiylik bor?", a: "Ularning barchasida tarbiya va jamoaviylik tamoyillari ustuvor bo‘lib, axborot iste’moli oila va jamiyat munosabatlari kontekstida ko‘riladi."},
-{q: "Mataganova axborot xavfsizligini qaysi omillar orqali o‘rgangan?", a: "U ochiq axborot tizimlarida diniy va ijtimoiy omillar hamda g‘oyaviy immunitet shakllantirish masalalarini tadqiq etgan."},
-{q: "Matematik hisob-kitoblaringizga qanday kafolat bor? deb so‘rasa nima deysiz?", a: "Barcha hisob-kitoblar zamonaviy statistik dasturlar (masalan, SPSS yoki MS Excel) yordamida, pedagogik o‘lchovlar nazariyasiga to‘la muvofiq holda amalga oshirilgan va tahlil qilingan."},
-{q: "Matematik tahlilda qaysi mezon (kriteriy)dan foydalandingiz?", a: "(Keng tarqalgan javob): Styuydentning t-kriteriysi yoki Pirsonning $\chi^2$ (xi-kvadrat) mezonidan natijalarning ishonchliligini tekshirishda foydalanildi."},
-{q: "Matematik tahlilda Styudent-Fisher kriteriysidan tashqari yana qanday tahlillar o‘tkazildi?", a: "Korrelyatsion tahlil va dispersiya tahlili orqali metodikaning samaradorligi ishonchli ravishda asoslandi."},
-{q: "Matematik usullarni qo‘llashda qanday xatolik darajasi (p-value) qabul qilindi?", a: "Odatda pedagogik tadqiqotlarda ishonchlilik darajasi $95\%$ ($p < 0.05$) qilib belgilanadi va bizning natijalarimiz shu talabga javob beradi."},
-{q: "Matematik-statistik usullar ishingizda qanday ahamiyatga ega?", a: "Ular tajriba-sinov ishlari boshida va oxirida olingan natijalarni solishtirish hamda metodikamizning samaradorligini raqamlarda isbotlash uchun xizmat qildi."},
-{q: "Matningizda axborot savodxonligi va axborot madaniyatini farqlagansiz. Ularning tub farqi nimada?", a: "Bu juda muhim farq. Axborot savodxonligi — bu asosan texnik-kognitiv ko‘nikmalar (axborotni izlash, saqlash, yuklab olish). Axborot madaniyati esa — bu axloqiy va intellektual darajadir. Savodxon odam axborotni topa oladi, madaniyatli odam esa o‘sha axborotning to‘g‘ri-noto‘g‘riligini, uning ma’naviy zarar yoki foydasini tahlil qila oladi va undan mas’uliyat bilan foydalanadi."},
-{q: "MDH - Sizning ishingiz MDH olimlari ishini shunchaki takrorlamaydimi?", a: "Yo‘q, chunki ular media-ta’lim va xavfsizlikni alohida yo‘nalishlarda yoritgan. Biz esa buni sinfdan tashqari faoliyat orqali bosqichli rivojlantirishning yaxlit metodik tizimini ishlab chiqdik."},
-{q: "MDH -Nima uchun siz MDH olimlari tajribasiga tayandingiz?", a: "Chunki MDH mamlakatlarida ta’lim tizimi va ijtimoiy muhit o‘xshash bo‘lgani uchun ularning metodik natijalari bizning sharoitimizga yaqinroqdir."},
-{q: "MDH olimlari ishlarida axborot iste’moli madaniyati atamasi qanchalik ko‘p uchraydi?", a: "Ular asosan media savodxonlik, axborot madaniyati va axborot xavfsizligi terminlarini alohida-alohida o‘rganganlar. Biz esa bularni iste’mol madaniyati tushunchasida birlashtirdik."},
-{q: "MDH- Siz o‘rgangan MDH olimlari ichida kim faktchekingga ko‘proq e’tibor bergan?", a: "N.I.Gendina o‘zining konseptual modelida faktchekingni axborot savodxonligining ajralmas qismi sifatida ko‘rsatib o‘tgan."},
-{q: "MDH -Tadqiqotingizdagi metodik-didaktik tizim MDH tajribasidan nimasi bilan ustun?", a: "Bizning tizimimiz nafaqat bilim beradi, balki sinfdan tashqari faoliyat orqali o‘quvchini real media-muhitda to‘g‘ri iste’molchi bo‘lib shakllanishini amaliy ta’minlaydi."},
-{q: "Me’yoriy-huquqiy hujjatlar ijrosini ta’minlashda qanday amaliy xizmat qiladi?", a: "Biz ishlab chiqqan metodik tavsiyalar va didaktik materiallar bevosita ta’lim muassasalarida yuqoridagi farmon va qarorlar ijrosini sifatli tashkil etishda qo‘llaniladi."},
-{q: "Mediata’lim elementlari ishingizda qanday qo‘llanilgan?", a: "Ommaviy axborot vositalari va ijtimoiy tarmoqlar bilan to‘g‘ri muloqot qilish ko‘nikmalari o‘quv fanlariga integratsiya qilingan."},
-{q: "Mediatahlil usuli axborotni idrok qilishni qanday ko‘rinishda rivojlantiradi?", a: "U axborotni idrok qilishni nazariy emas, balki amaliy kompetensiya (masalan, mediamateriallarni taqqoslash, infografika tayyorlash) sifatida rivojlantiradi."},
-{q: "Mediatahlil usulining asosiy maqsadi o‘quvchini qanday sub’yektga aylantirishdan iborat?", a: "Yoshlarni axborotning maqsadi, g‘oyaviy yo‘nalishi va ijtimoiy ta’sirini tahlil qila oladigan faol sub’yektga aylantirishdir."},
-{q: "Metodik modellashtirish usuli orqali nima yaratildi?", a: "Yoshlarda axborot iste’moli madaniyatini rivojlantirishning maqsadli, mazmunli va natijaviy komponentlarini o‘z ichiga olgan pedagogik modeli yaratildi."},
-{q: "Metodik tavsiyalaringizda aynan faktcheking va axborot filtratsiyasiga urg‘u bergansiz?", a: "Sababi, zamonaviy axborot muhitida manipulyatsiya va feyk xabarlar ko‘paygan. Tavsiyamizga ko‘ra, bu ko‘nikmalarni darsdan tashqari faoliyatga integratsiya qilish o‘quvchida tanqidiy fikrlashni amaliy kompetensiya darajasiga ko‘taradi."},
-{q: "METODIK TIZIM -Nima uchun maktab va OTMda aynan metodik tizimga ehtiyoj ortmoqda?", a: "Chunki faqat nazariy bilim berish yetarli emas; yoshlarga axborotni qanday saralashni o‘rgatuvchi aniq qadam-baqadam metodik ko‘rsatmalar zarur."},
-{q: "Metodikangizda qaysi amaliy ko‘nikmalarni shakllantirishga xizmat qiladigan o‘quv faoliyati shakllari tizimlashtirilgan?", a: "Axborotni tanlab qabul qilish, manbalarni solishtirish, faktcheking va axborot xavflarini filtrlash kabi ko‘nikmalarni shakllantirishga xizmat qiluvchi shakllar tizimlashtirilgan."},
-{q: "Metodikangizning asosiy o‘zagini nimalar tashkil etadi?", a: "Mediata’lim elementlari, vizual tahlil, o‘quvchi faolligini kuchaytiruvchi interfaol modellar va raqamli muhitda axborot bilan ishlash strategiyalari metodikaning asosiy o‘zagidir."},
-{q: "Metodikangizning past o‘zlashtiruvchi o‘quvchilarga ta’siri raqamlarda qanday aks etdi?", a: "Tajriba guruhida 2 (qoniqarsiz) baholar 20,4%dan 8,33%ga (12,07%ga) kamaydi. Nazorat guruhida esa aksincha, 2 baholar 12,5%dan 14,44%ga ko‘paygan."},
-{q: "Metodik-didaktik ta’lim jarayoni deyilgan. Bu yerda didaktik deganda nima nazarda tutilgan?", a: "Bu — axborot iste’moli madaniyatini o‘rgatishning qoidalari, metodlari va vositalari majmuasidir."},
-{q: "Metodik-didaktik ta’minotni takomillashtirish predmetingizda qanday ko‘rinadi?", a: "Mavjud metodlarga axborotni ongli saralash va ma’naviy-axloqiy baholash mexanizmlarini qo‘shish orqali."},
-{q: "Metodik-didaktik tizim yaratishga zarurat tug‘ildi?", a: "Axborot oqimi shiddati oshgani sababli, yoshlarga axborotni saralashni tizimli ravishda o‘rgatadigan aniq pedagogik qo‘llanma va metodlar zarur bo‘lib qoldi."},
-{q: "Metodik-didaktik so‘ziga urg‘u beryapsiz?", a: "Chunki biz nafaqat muammoni aniqladik, balki uni ta’lim jarayonida qanday o‘qitish bo‘yicha tayyor metodika va qo‘llanmalarni ishlab chiqdik."},
-{q: "Metodlaringiz obyektivlik (xolislik) talabiga javob beradimi?", a: "Albatta, chunki miqdoriy (matematik) va sifat (kuzatish, suhbat) tahlillarining uyg‘unligi natijalarning haqqoniyligini ta’minlaydi."},
-{q: "Milliy barqarorlik sharti deb hisoblanmoqda?", a: "Chunki axborot oqimi orqali yoshlar ongini zaharlash jamiyatda ijtimoiy beqarorlikni keltirib chiqarishi mumkin. Immunitet esa buni oldini oladi."},
-{q: "Milliy ijtimoiy-ma’naviy omillar deganda nimalar nazarda tutilgan?", a: "Bizning milliy qadriyatlarimiz, odob-axloq qoidalarimiz va tarbiya usullarimizning axborot saralashdagi o‘rni."},
-{q: "MIT Media Lab olimlari dezinformatsiyani qaysi fanlar kesimida o‘rganishgan?", a: "S.Levandovskiy va T.Rend feyk yangiliklarni qabul qilishni psixologiya va neyrokognitiv (miya faoliyati) mexanizmlar asosida asoslab berishgan."},
-{q: "MIT olimlari aytgan feykka ishonish neyrokognitiv mexanizmini oddiyroq qanday tushuntirish mumkin?", a: "Bu inson miyasi axborotni qayta ishlashda hissiyotlarga berilib, mantiqiy xatoga yo‘l qo‘yishi jarayonidir. Biz metodikamizda aynan shu xatolarni kamaytirish yo‘llarini ko‘rsatganmiz."},
-{q: "Model o‘quvchi sub’yektiga qanday moslashtirilgan?", a: "O‘quvchining yosh xususiyatlari, axborotga bo‘lgan ehtiyoji va raqamli muhitdagi qiziqishlari inobatga olingan holda topshiriqlar tizimi ishlab chiqilgan."},
-{q: "Modellashtirish jarayonida qaysi komponentlar ustuvor hisoblanadi?", a: "Axborotni ongli qabul qilish, saralash va baholash mexanizmlari modelning asosi hisoblanadi."},
-{q: "Modelning funksional strukturasi deganda nima nazarda tutilgan?", a: "Bu modelning shunchaki chizmasi emas, balki uning qanday ishlashi, ya’ni axborotni qabul qilishdan baholashgacha bo‘lgan amaliy bosqichlar zanjiridir."},
-{q: "Monografik planda kompleks tadqiq etish deganda nimani tushunish kerak?", a: "Bu muammoning maqsadidan boshlab, uning mexanizmlari va mezonlarigacha bo‘lgan barcha qismlarini bitta yaxlit ilmiy ishda, har tomonlama yoritish demakdir."},
-{q: "Muallif sifatida yosh avlodning axborot muhitidagi qanday munosabatini shakllantirish imkoniyatlarini yoritib bergansiz?", a: "Yoshlarning axborot muhitida ongli, mas’ul va madaniy munosabatini shakllantirish imkoniyatlarini yoritib berganman."},
-{q: "Multimedia resurslaringiz qanday ko‘rinishda?", a: "Bular darslarda foydalanish uchun mo‘ljallangan tushuntiruvchi videoroliklar, animatsiyalar va raqamli taqdimotlar majmuasi."},
-{q: "N. Postman va R. Xobbs kabi olimlarning qarashlari ishingizda qanday tanqidiy tahlil qilingan?", a: "Biz ularning media-ta’lim texnologiyalarini ijobiy baholagan holda, ulardagi erkinlik tushunchasining mutloqlashtirilishiga nisbatan o‘zimizning mas’uliyat tamoyilimizni qarshi qo‘ydik."},
-{q: "N.To‘xtaxo‘jayeva ta’rifidagi qadriyatlar tizimi bilan uyg‘un foydalanish deganda nima nazarda tutiladi?", a: "Bu har qanday ma’lumotni milliy mentalitet, oilaviy qadriyatlar va davlat manfaatlariga zid kelmaslik darajasida qabul qilishdir. Bu ta’rifning kuchli tomoni — uning ma’naviy yo‘naltirilganligida."},
-{q: "N.To‘xtaxo‘jayevaning axborot tanlovi g‘oyasi bugun nega dolzarb?", a: "Axborot ko‘pligi (infodemiya) sharoitida eng qiyin ish — tanlash. Tanlov qobiliyati — bu madaniyatning oliy ko‘rinishidir."},
-{q: "Natijalaringiz maktab ta’lim sifatini oshirishga qanday ta’sir qiladi?", a: "O‘quvchilarda axborot bilan ishlashning to‘g‘ri madaniyati shakllanishi ularning barcha fanlarni o‘zlashtirishdagi mustaqilligi va samaradorligini oshiradi."},
-{q: "Natijalarni grafik tavsiflashda qanday vositalardan foydalandingiz?", a: "O‘sish dinamikasini ko‘rsatish uchun gistogrammalar, diagrammalar va tahliliy jadvallardan foydalanildi."},
-{q: "Natijalarni joriy etishda milliy-ma’naviy muhit qanday inobatga olindi?", a: "Loyiha va teleko'rsatuvlar ssenariylarida axborotni saralash mezonlari milliy qadriyatlarimiz va axloqiy normalarimizga muvofiqlashtirildi."},
-{q: "Natijalarning ishonchliligini o‘qituvchilar qanday baholashdi?", a: "Amaliyotchi o‘qituvchilar ishlab chiqilgan metodik yechimlarni yuqori samarali deb baholab, o‘z darslarida muvaffaqiyatli qo‘lladilar."},
-{q: "Naydonovaning axborot immuniteti haqidagi xulosasi qanday? ", a: "U media-ta’limni tajriba tariqasida joriy etish orqali yoshlarda axborotni tanqidiy qabul qilish madaniyati va immunitetini shakllantirish natijalarini isbotlab bergan."},
-{q: "Nazariy jihatdan qaysi yondashuvlarga tayanildi?", a: "Kognitiv, affektiv, integrativ va faoliyatga asoslangan yondashuvlarga tayanilgan."},
-{q: "Nazariy manbalar tahlili qanday amalga oshirildi?", a: "Mavzu bo‘yicha 150 dan ortiq milliy va xalqaro ilmiy adabiyotlar, me’yoriy hujjatlar va internet resurslari tahlil qilindi."},
-{q: "Nazariy usullar tarkibidagi tizimli yondashuvning mohiyati nimada?", a: "Bu yoshlarda axborot iste’moli madaniyatini alohida element emas, balki maqsad, mazmun, metod va natija birligidan iborat yaxlit pedagogik tizim sifatida o‘rganish imkonini berdi."},
-{q: "Olimlar Siz o‘rgangan olimlar ichida kimning metodikasi sizga eng yaqin?", a: "R.Samarovning nazariy qarashlari va N.To‘xtaxo‘jayevaning axborot iste’moli psixologiyasi bo‘yicha yondashuvlari bizning metodik modelimiz uchun poydevor bo‘ldi."},
-{q: "Ongli qabul qilish mexanizmi deganda nima nazarda tutilgan?", a: "Yoshlarning axborotga ko‘r-ko‘rona emas, balki uning maqsadi va manbasini anglagan holda yondashish jarayoni."},
-{q: "Onkovich-Ukrainalik olima G.V.Onkovichning yondashuvi qanday? ", a: "U oliy ta’limda kasbiy yo‘naltirilgan media-ta’lim orqali talabalarda axborotni ijodiy qayta ishlash ko‘nikmalarini rivojlantirishni taklif etga"},
-{q: "P.Zurovning Information consumption culture tushunchasiga milliy pedagogik terminologiyamiz qanday munosabatda?", a: "Biz bu tushunchani Axborot iste’moli madaniyati deb tarjima qilib, uning mazmuniga ma’naviy immunitet elementlarini qo‘shdik."},
-{q: "P.Zurovning ta’rifida ma’naviy-ijtimoiy foyda tushunchasi qanday izohlanadi?", a: "Bu axborotni shunchaki vaqt o‘tkazish uchun emas, balki shaxsiy rivojlanish, bilim olish va jamiyatga foyda keltirish uchun iste’mol qilish madaniyatidir."},
-{q: "Panserev axborot xavfsizligini qanday kontekstda tadqiq qilgan? ", a: "U bu masalani geosiyosiy tahdidlar va media-manipulyatsiya nuqtai nazaridan o‘rganib, yoshlar ongini himoya qilish mexanizmlarini taklif etgan."},
-{q: "Parpiyeva tadqiqotlarining sizning ishingizdan farqi nimada?", a: "M.M.Parpiyeva asosan AKT sohasidagi innovatsiyalar va texnik samaradorlikka urg‘u bergan bo‘lsa, biz axborotni iste’mol qilishning ma’naviy-axloqiy va metodik jihatlariga e’tibor qaratdik."},
-{q: "Pedagogik boshqaruvda axborot xavfsizligiga oid ta’limiy profilaktika qanday amalga oshiriladi?", a: "Bu faqat taqiqlash emas, balki o‘quvchida dezinformatsiyaga nisbatan immunitet hosil qilish, o‘quv faoliyatini monitoring qilish va refleksiv tahlil orqali xavflarni oldindan ko‘ra bilish ko‘nikmasini shakllantirishdir."},
-{q: "Pedagogik eksperiment necha bosqichda o‘tkazildi?", a: "Eksperiment an’anaviy tarzda uch bosqichda: aniqlovchi (diagnostik), shakllantiruvchi va tekshiruv (nazorat) bosqichlarida o‘tkazildi."},
-{q: "Pedagogik natijadagi global va milliy uyg‘unlikka qanday erishiladi?", a: "Ta’lim mazmuniga xalqaro faktcheking metodlarini kiritish va ularni milliy manbalar misolida mashq qildirish orqali."},
-{q: "PF-5712-sonli Farmonda axborot madaniyati bo‘yicha qanday vazifa bor?", a: "Unda ta’lim sifatini oshirish va yoshlarni zamonaviy axborot texnologiyalari muhitida ongli faoliyat yuritishga tayyorlash vazifalari belgilangan."},
-{q: "PQ-4119-sonli qaror ishingizga qanday hissa qo‘shadi? ", a: "Bu qaror ta’lim sifati nazoratini takomillashtirishga oid bo‘lib, biz ishlab chiqqan baholash mezonlari va indikatorlari aynan shu nazorat tizimiga mos keladi."},
-{q: "PQ-4623-sonli qarorning (2020-yil 27-fevral) ishingizdagi roli nima?", a: "Bu pedagogik ta’lim sohasini rivojlantirishga oid bo‘lib, bizning tadqiqotimizdagi metodik-didaktik tizim aynan pedagogik kadrlarni tayyorlash sifatini oshirishga xizmat qiladi."},
-{q: "Predmet tarkibidagi metodik-didaktik ta’minot deganda nimani tushunasiz?", a: "Bu — axborot iste’moli madaniyatini shakllantirishga xizmat qiluvchi o‘quv dasturlari, metodik qo‘llanmalar va didaktik materiallar majmuidir."},
-{q: "Predmetda axborotni tahlil qilishdan oldin saralash turibdi?", a: "Chunki tahlil qilish vaqt talab qiladi; inson avval hamma axborotni tahlil qilmay, uni yuzaki filtrlashi (saralashi), keyin muhimlarini tahlilga olishi kerak."},
-{q: "Predmetingiz yoshlarning internetdagi xulq-atvorini qamrab oladimi?", a: "Ha, amaliy mexanizmlar orqali yoshlarning raqamli muhitdagi harakatlari pedagogik nazoratga olinadi va yo‘naltiriladi."},
-{q: "Predmetingizda model so‘zi nimaga ishora qiladi?", a: "Axborot iste’moli madaniyatini rivojlantirishning maqsad, vazifa, bosqich va natijalarini o‘zida mujassam etgan nazariy-amaliy tizimga."},
-{q: "Predmetingizda rivojlantirish jarayoni nega ta’kidlangan?", a: "Chunki axborot iste’moli madaniyati birdaniga shakllanmaydi, u ma’lum bir bosqichli rivojlanish dinamikasiga ega."},
-{q: "Predmetingizda texnologiyalar deganda AKT nazarda tutilganmi?", a: "Ha, lekin faqat kompyuter emas, balki axborot bilan ishlashning pedagogik texnologiyalari (masalan, tanqidiy fikrlash texnologiyasi) ham nazarda tutilgan."},
-{q: "Predmetingizda vositalar deganda ko‘proq nima tushuniladi?", a: "Axborot iste’moli madaniyatini o‘lchashga xizmat qiluvchi testlar, so‘rovnomalar va tahliliy jadvallar."},
-{q: "Predmetingizdagi metod va vositalarga misol keltiring.", a: "Masalan, faktcheking metodlari, keys-stadi texnologiyalari va raqamli o‘quv vositalari."},
-{q: "Predmetingizdagi pedagogik mazmun yoshlarning tarbiyasiga qanday ta’sir qiladi?", a: "U yoshlarda axborotga nisbatan mas’uliyat, axloqiy yondashuv va o‘z-o‘zini himoya qilish (immunitet) sifatlarini tarbiyalaydi."},
-{q: "Prezident Sh.Mirziyoyev yoshlar tarbiyasi va axborot xurujlari haqida nimalarni ta’kidlagan?", a: "Davlatimiz rahbari yoshlar ongi va qalbini yot va zararli ta’sirlardan himoya qilishni bugungi kunning eng dolzarb vazifasi deb belgilab berganlar."},
-{q: "Qiyosiy tahlil usuli orqali nimalarni solishtirdingiz?", a: "Milliy va xorijiy tajribalarni hamda tajriba-sinov ishtirokchilarining darsga qadar va darsdan keyingi mediasavodxonlik darajasini solishtirdik."},
-{q: "Qo‘shrabot, Xovos va Chiroqchi tumanlari tanlanishi tasodifmi?", a: "Yo‘q, bu tumanlar turli xil axborot muhitiga ega bo‘lishi mumkinligi inobatga olingan holda, metodikamizning universalligini tekshirish uchun tanlangan."},
-{q: "Qosimovning tadqiqotlari yo‘nalishi qanday?", a: "U ta’limda AKTni joriy etish tendensiyalari va raqamli kompetensiyalarni pedagogik innovatsiya sifatida o‘rgangan."},
-{q: "Raqamli etika tushunchasini qanday izohlaysiz?", a: "Bu — raqamli muhitda muloqot qilish, ma’lumot tarqatish va axborotdan foydalanishda amal qilinishi kerak bo‘lgan axloqiy qoidalar majmuasidir."},
-{q: "Raqamli etikaning ilmiy ahamiyati ishingizda qanday aks etgan?", a: "Raqamli muhitda yoshlarning xulq-atvor normalari va axborot bilan muloqot madaniyatining pedagogik asoslarini tizimlashtirdik."},
-{q: "Raqamli muhitda axborot bilan ishlash strategiyalari deganda aniq nimalarni nazarda tutgansiz?", a: "Bunga axborotni xavfsiz qidirish, manbalarni filtrlash, shaxsiy ma’lumotlarni himoya qilish va raqamli muloqot madaniyatiga rioya qilish algoritmlari kiradi."},
-{q: "Raqamli muhitda o‘quv faoliyatini tashkil etish bo‘yicha qanday amaliy ko‘rsatmalar berdingiz?", a: "O‘qituvchilarga ijtimoiy tarmoqlar va ta’limiy platformalarda o‘quvchilar bilan qanday muloqot qilish va ularni nazorat qilish bo‘yicha metodik yo‘riqnomalar."},
-{q: "Raqamli ta’lim platformalari bilan uyg‘unlashtirish qanday amalga oshadi?", a: "Biz ishlab chiqqan topshiriqlar va multimedia resurslari masofaviy ta’lim tizimiga (masalan, Moodle yoki boshqa platformalarga) oson integratsiya qilinadi."},
-{q: "Refleksiv ko‘rsatkichlarda Passiv – Faol – Tashabbuskor sathlari nimani anglatadi?", a: "Passiv: Xatosini ko‘rsatishsa tushunadi; Faol: O‘z xatosini o‘zi tahlil qiladi; Tashabbuskor: Axborot bilan ishlash strategiyasini doimiy ravishda o‘zi takomillashtirib boradi."},
-{q: "Refleksiya kartalari o‘quvchiga amalda nima beradi?", a: "O‘quvchiga o‘zining axborot bilan ishlashdagi xatolarini mustaqil aniqlash va o‘z bilimini baholash imkonini beradi."},
-{q: "Refleksiya tahlili usuli nimani anglatadi?", a: "Bu o‘quvchilarning o‘zlarining axborot iste’moli jarayonini tushunib yetishi, xatolarini anglashi va o‘z-o‘zini baholash natijalarini ilmiy tahlil qilishdir."},
-{q: "Refleksiya varaqalari amaliyotda qanday qo‘llaniladi?", a: "O‘quvchi har bir axborot bilan ishlash jarayonidan so‘ng o‘z harakatlarini tahlil qilishi uchun mo‘ljallangan maxsus o‘z-o‘zini baholash jadvallari."},
-{q: "Refleksiya varaqalarini joriy etishdan maqsad nima edi?", a: "O'quvchilarda o'z-o'zini tahlil qilish va axborotni qabul qilishdagi shaxsiy xatolarini mustaqil tuzatish ko'nikmasini shakllantirish."},
-{q: "Rivojlangan davlatlar (Singapur, AQSH, Yevropa) tajribasini keltiribsiz. Ularning raqamli ta'lim tizimidagi yondashuvlarini bizning muhitga to'g'ridan-to'g'ri tatbiq etib bo'ladimi? Bizning farqimiz nimada bo'lishi kerak?", a: " Ularning axborotni texnik jihatdan tahlil qilish va feyklarni aniqlash texnologiyalarini o'zlashtirishimiz zarur. Biroq, ularni to'g'ridan-to'g'ri ko'chirmaymiz, chunki biz axborotni saralab qabul qilishda uning axloqiy va ijtimoiy mas'uliyatiga (matningizda ta'kidlanganidek) asosanamiz. Bizning yondashuvimizda axborotni nafaqat tanqidiy fikrlash orqali, balki milliy-ma'naviy qadriyatlarimiz asosida baholash ustuvor hisoblanadi."},
-{q: "Rivojlangan davlatlar va nufuzli markazlar (MIT, Stanford) bu masalani o'rganayotgan ekan, sizning tadqiqotingiz ular qila olmagan qaysi bo'shliqni to'ldiradi?", a: "Dunyo miqyosidagi tadqiqotlar asosan texnik yoki umumiy mediasavodxonlikka yo'naltirilgan. Bizning tadqiqotimizning farqi va yangiligi shundaki, biz axborot iste'moli madaniyatini ma'naviy-ma'rifiy qadriyatlarimiz va o'zimizning milliy ta'lim tizimimiz talablari bilan integratsiya qilgan holda, yaxlit metodik modelni ishlab chiqdik. Ya'ni, biz axborotni nafaqat feyk yoki haqiqatga, balki foydali yoki zararli ekanligiga ko'ra saralashni taklif etmoqdamiz."},
-{q: "Rivojlangan davlatlar va nufuzli markazlar (MIT, Stanford) bu masalani o'rganayotgan ekan, sizning tadqiqotingiz ular qila olmagan qaysi bo'shliqni to'ldiradi?", a: "Dunyo miqyosidagi tadqiqotlar asosan texnik yoki umumiy mediasavodxonlikka yo'naltirilgan. Bizning tadqiqotimizning farqi va yangiligi shundaki, biz axborot iste'moli madaniyatini ma'naviy-ma'rifiy qadriyatlarimiz va o'zimizning milliy ta'lim tizimimiz talablari bilan integratsiya qilgan holda, yaxlit metodik modelni ishlab chiqdik. Ya'ni, biz axborotni nafaqat feyk yoki haqiqatga, balki foydali yoki zararli ekanligiga ko'ra saralashni taklif etmoqdamiz."},
-{q: "Rossiya va Ukrainadagi media-ta’lim tajribalarining farqi nimada?", a: "Rossiyada ko‘proq nazariy va texnologik modellarga, Ukrainada esa (Naydonova misolida) tajriba-sinov ishlari va amaliy immunitetni shakllantirishga urg‘u berilgan."},
-{q: "Salganova tadqiqotlaridagi ishonch kanallari va tahdidni anglash indikatorlari nima? ", a: "Bular talabalarning qaysi axborot manbalariga ishonishi va xavfni qanchalik tez seza olishini o‘lchovchi ko‘rsatkichlardir."},
-{q: "Samarov va Yo.Sattorovlarning ishlari sizning tadqiqotingizga qanday nazariy asos bo‘ldi?", a: "Ular axborot madaniyatining nazariy-metodologik mazmunini ishlab chiqqanlar. Biz esa bu nazariyani aynan iste’mol madaniyati kontekstida amaliyotga tatbiq etdik."},
-{q: "Saparova tadqiqotlarining asosiy mavzusi nima?", a: "AKT sohasida innovatsion menejment va foydalanuvchi madaniyatini shakllantirish omillari."},
-{q: "Serikbayeva -Qozog‘istonlik olima N.B.Serikbayeva media-savodxonlikka qanday ta’rif beradi? ", a: "U media-savodxonlikni shaxsning axborot-kommunikativ madaniyati sifatida talqin qiladi va mediaqo‘zыret (media kompetensiya) tushunchasini asoslaydi."},
-{q: "Shnayder- Avstriyalik olim D.Shnayderning raqamli etika bo‘yicha qarashlari nimadan iborat?", a: "U raqamli etika yoshlarni axborot xavflaridan asrashda asosiy tarbiyaviy poydevor bo‘lishi kerakligini isbotlagan."},
-{q: "Shuncha olim o‘rgangan bo‘lsa, sizning ishingizdagi bo‘shliq (gap) nimadan iborat?", a: "Mavjud ishlar axborot madaniyatining ayrim bo‘laklarini (texnik, psixologik yoki huquqiy) o‘rgangan. Bizning ishimizda esa bu masala ilk bor tizimli, bosqichli va kompleks metodik-didaktik yondashuv asosida tadqiq etildi."},
-{q: "Sidiqova voyaga yetmaganlar xavfsizligi bo‘yicha nimalarni taklif qilgan?", a: "U media tahdidlarning psixologiyasi va ularning profilaktikasi bo‘yicha pedagogik yechimlarni yoritib bergan."},
-{q: "Sinfdan tashqari axborot-ma’rifiy yechimlar nima uchun kerak?", a: "Chunki yoshlar internetdan asosan darsdan tashqari vaqtda foydalanishadi va aynan shu vaqtda ularga metodik yordam zarur."},
-{q: "Sinfdan tashqari faoliyat deganda nima nazarda tutilgan (331-sonli qaror asosida)?", a: "Maktabdan tashqari ta’lim va to‘garaklar orqali yoshlarning bo‘sh vaqtida axborotdan to‘g‘ri foydalanish ko‘nikmalarini shakllantirish."},
-{q: "Sinfdan tashqari faoliyatga katta e’tibor qaratdingiz?", a: "Sababi, yoshlar axborotni asosan darsdan tashqari vaqtda, erkin muhitda iste’mol qiladilar. Shuning uchun bu madaniyatni aynan sinfdan tashqari tadbirlarda shakllantirish samaraliroqdir."},
-{q: "Singapurning Digital Literacy Programme loyihasining o‘ziga xosligi nimada?", a: "Ushbu dastur doirasida har bir o‘quvchi axborotni nafaqat tahlil qilishni, balki uni xavfsiz iste’mol qilishni maxsus darslarda o‘rganadi."},
-{q: "Sinov (tajriba) va nazorat guruhlari qanday mezonlar asosida shakllantirildi?", a: "O‘quvchilar soni, o‘quv muhiti va boshlang‘ich tayyorgarlik darajasi bo‘yicha tenglashtirilgan holda shakllantirildi."},
-{q: "Sinov va nazorat guruhlari o‘rtasidagi farq qanday aniqlandi?", a: "Axborot bilan ishlash ko‘nikmalari va kompetensiyalaridagi o‘zgarishlarni matematik-statistik tahlil qilish orqali."},
-{q: "Siz ishlab chiqqan interaktiv kartalarning vazifasi nimadan iborat?", a: "Bu kartalar o‘quvchilarga axborot bilan ishlashda yo‘l xaritasi vazifasini o‘taydi (masalan, Xabar kelganda nima qilish kerak? degan savolga bosqichma-bosqich javob beradi)."},
-{q: "Siz ishlab chiqqan majmua (metodik paket) ichida nimalar borligini sanab bera olasizmi?", a: "Model, dars ssenariylari, didaktik topshiriqlar, diagnostik testlar, refleksiya varaqlari, multimedia resurslari va metodik tavsiyalar."},
-{q: "Siz ishlab chiqqan modelning mazmun-strukturasi an’anaviylardan nimasi bilan farq qiladi?", a: "Bizning modelimizda dezinformatsiyani filtrlash mexanizmi alohida blok sifatida kiritilgan bo‘lib, u yoshlarni manipulyatsiyadan himoya qilishga xizmat qiladi."},
-{q: "Siz ko‘rsatgan affektiv komponent nima va u axborot iste’molida qanday rol o‘ynaydi?", a: "Affektiv komponent — bu insonning axborotga bo‘lgan hissiy munosabatidir. Masalan, feyk xabarlar yoki manipulyatsiyalar ko‘pincha insonning his-tuyg‘ulariga (qo‘rquv, g‘azab, hayrat) ta’sir qiladi. Affektiv madaniyatga ega o‘quvchi hissiyotlarga berilmasdan, axborotni sovuqqonlik bilan tahlil qila oladi."},
-{q: "Siz taklif etayotgan indikatorlar (ko‘rsatkichlar) nimalardan iborat?", a: "Bular o‘quvchining axborotni manbasini tekshirish tezligi, feykni aniqlash aniqligi va axborotga nisbatan tanqidiy munosabat bildirish darajasini o‘lchovchi mezonlardir."},
-{q: "Siz taklif etgan pedagogik boshqaruv tizimida o‘qituvchining roli qanday o‘zgaradi?", a: "O‘qituvchi tayyor ma’lumot beruvchidan fasilitator va mentorga aylanadi. U o‘quvchi bilan hamkorlikda axborot xavfsizligi va raqamli monitoring jarayonini boshqaradi (7-band)."},
-{q: "Siz yaratgan metodik bazaning asosiy afzalligi nimada?", a: "U tajribagacha va tajribadan so‘nggi holatni obyektiv solishtirish va o‘zgarishlar dinamikasini aniq ko‘rsatish imkonini beradi."},
-{q: "Sizning indikatorlaringiz boshqa pedagogik o‘lchovlardan nimasi bilan farq qiladi?", a: "Bizning indikatorlarimiz nafaqat bilimni, balki axborotga nisbatan munosabat (affektiv) va o‘z harakatini boshqarish (metokognitiv) ko‘nikmalarini ham o‘lchaydi."},
-{q: "Sizning ishingiz pedagogika nazariyasiga qanday yangi tushuncha olib kirdi?", a: "Axborot iste'moli madaniyatini rivojlantirishning metodik-didaktik tizimi tushunchasini kompleks (neyropedagogik va kognitiv) yondashuvlar bilan boyitdi."},
-{q: "Sizning ishingizda axloqiy-ma’rifiy nuqtai nazar qanday aks etgan?", a: "Bu axborotning nafaqat to‘g‘riligini, balki uning ma’naviy qadriyatlarimizga, odob-axloq normalariga qanchalik mos kelishini baholashda ko‘rinadi."},
-{q: "Sizning ishingizdan keyin bu sohada yana nimalarni o‘rganish mumkin? ", a: "Sun’iy intellekt muhitida axborot iste’moli madaniyatini va neyropedagogik yondashuvlarni yanada chuqurroq o‘rganish mumkin."},
-{q: "Sizning jadvalingizda Axborot xavfsizligi masalasi qaysi olimning ta’rifiga ko‘proq yaqin?", a: "Q.Abduraxmonov va N.To‘xtaxo‘jayevaning ta’riflariga, chunki xavfsizlik — bu avvalo mas’uliyat va qadriyatlar himoyasidir."},
-{q: "Sizning metodikangiz boshqa hududlarda ham xuddi shunday ishonchli natija beradimi?", a: "Ha, dispersiya tahlili natijalari shuni ko‘rsatdiki, metodika turli hududiy maktablarda bir xil barqaror samaradorlikka ega."},
-{q: "Sizning obyektingiz yoshlarda axborot iste'moli madaniyatimi yoki ta'lim jarayonimi?", a: "Aniqroq aytganda, obyektimiz — shu madaniyatni rivojlantirishga qaratilgan metodik-didaktik ta'lim jarayonidir. Insonning o'zi emas, balki uni tarbiyalash jarayoni obyektdir."},
-{q: "Sizning ta’rifingizda kognitiv barqarorlik elementi bormi?", a: "Ha, biz Abduraxmonov va Kastelsning g‘oyalarini rivojlantirib, axborot yuklamasi sharoitida o‘quvchining ruhiy-aqliy barqarorligini saqlash masalasini kiritdik."},
-{q: "Sizning tadqiqotingizda eng samarali bo‘lgan usul qaysi?", a: "Barcha usullar o‘zaro bog‘liq, lekin metodik modellashtirish va pedagogik eksperiment yangi tizimni yaratish va isbotlashda asosiy rol o‘ynadi."},
-{q: "Sizning tadqiqotingizda H_0 (nol gipoteza) va H_1 (muqobil gipoteza) nimalarni anglatadi?", a: "H_0 Nol gipoteza: Tajriba va nazorat guruhlari ballari orasida farq yo‘q, ya’ni biz taklif etgan metodika samaradorlikka ta’sir qilmadi. H_1 Muqobil gipoteza: Tajriba guruhi ballari nazorat guruhidan statistik jihatdan yuqori, ya’ni metodika samarali deb topildi."},
-{q: "Sizning yangiligingiz sohadagi boshqa tadqiqotlardan tubdan nimasi bilan farq qiladi?", a: "Boshqalar ko‘proq AKT ko‘nikmalariga e’tibor bergan bo‘lsa, biz ilk bor neyropedagogik va metakognitiv yondashuvlar orqali yoshlarning **ichki himoya filtri (immuniteti)**ni shakllantirish metodikasini yaratdik."},
-{q: "Sizningcha, ushbu to‘rtta olimdan qaysi birining yondashuvi bugungi O‘zbekiston yoshlari uchun ko‘proq mos keladi?", a: "Ularning hech biri alohida holda to‘liq javob bermaydi. Shuning uchun biz Abduraxmonovning mas’uliyatini Kastelsning ijodkorligi bilan sintez qildik."},
-{q: "Sizningcha, xorijiy tajribadan aynan nima bizga yot va uni qabul qilmasligimiz kerak?", a: "Axborot erkinligini hech qanday axloqiy chegarasiz talqin qilish va shaxsiy manfaatlarni ijtimoiy manfaatlardan mutloq ustun qo‘yish yondashuvlarini milliy pedagogikamiz nuqtai nazaridan filtrdan o‘tkazishimiz kerak."},
-{q: "Sotsiomadaniy jihat deganda xorijiy olimlar nimani nazarda tutadi?", a: "Axborotning turli madaniyatlararo muloqotdagi o‘rni va insonning global tarmoqdagi o‘zini tutish madaniyatini."},
-{q: "Ssenariylar tayyorlashda axborot xavfsizligi qirralari qanday yoritildi?", a: "Yoshlarni axborot xurujlaridan himoya qilish va ularda g‘oyaviy immunitetni shakllantirish bo‘yicha amaliy-didaktik yechimlar ssenariylar mazmuniga singdirildi."},
-{q: "Stanford universitetining Civic Online Reasoning loyihasi maqsadi nima?", a: "Loyihaning asosiy maqsadi o‘quvchilarda internetdagi ma’lumotlarni faktcheking (faktlarni tekshirish) qilish ko‘nikmalarini rivojlantirishdir."},
-{q: "Statistik tahlil natijalari qanday ko‘rinishda bayon etilgan?", a: "Natijalar qiyosiy jadvallar, gistogrammalar va matematik hisob-kitoblar ko‘rinishida dissertatsiyaning uchinchi bobida batafsil keltirilgan."},
-{q: "Statistik tahlilda korrelyatsion tahlil va dispersiya tahlili nima uchun qo‘llanildi?", a: "Korrelyatsion tahlil orqali biz axborot madaniyatining turli komponentlari (masalan, kognitiv va affektiv) o‘rtasidagi bog‘liqlikni, dispersiya tahlili orqali esa natijalarning tarqoqligini (barqarorligini) aniqladik."},
-{q: "Styudent-Fisher kriteriysini tanladingiz?", a: "Chunki bu kriteriy kichik va o‘rta hajmdagi tanlanmalar (365 o‘quvchi) uchun natijalarning ishonchliligini tekshirishda eng aniq va klassik metod hisoblanadi."},
-{q: "Styudent-Fisher t-kriteriysi ishingizda qanday rol o‘ynadi?", a: "Tajriba va nazorat guruhlari natijalari o‘rtasidagi o‘rtacha arifmetik qiymatlarning farqi tasodifiy emas, balki statistik jihatdan ahamiyatli ekanini isbotlash uchun xizmat qildi."},
-{q: "Styudentning t-mezonidan foydalandingiz?", a: "Chunki bizda ikkita mustaqil guruh (tajriba va nazorat) mavjud va ularning o‘rtacha o‘zlashtirish ballari o‘rtasidagi farq statistik jihatdan ahamiyatlimi yoki tasodifiymi degan savolga javob topish kerak edi. Styudent mezoni kichik va o‘rta hajmdagi tanlanmalar uchun eng ishonchli usuldir."},
-{q: "Sub’yekt-faoliyat yondashuvi ishingizda qanday namoyon bo‘ladi?", a: "O‘quvchi axborotni shunchaki passiv qabul qiluvchi emas, balki uni tahlil qiluvchi, saralovchi va faol qayta ishlovchi sub’yekt sifatida ishtirok etadi."},
-{q: "Suhbat usuli so‘rovnomadan nima bilan farq qildi?", a: "So‘rovnoma yalpi ma’lumot bergan bo‘lsa, suhbat individual tarzda o‘quvchilarning ichki qarashlarini va axborotga nisbatan hissiy (affektiv) munosabatini aniqlashga yordam berdi."},
-{q: "Suoranta-Finlyandiyalik tadqiqotchi Y.Suorantaning ishlarida biz uchun qaysi jihat muhim?", a: "U yoshlarning internet-manipulyatsiyaga moyillik omillarini va tanqidiy savodxonlik masalalarini chuqur tahlil qilgan."},
-{q: "Ta’lim jarayonida qaysi tarbiyaviy omillarni birlashtirish orqali ushbu maqsadga erishiladi?", a: "Milliy qadriyatlar, axborot etikasi, tanqidiy fikrlash va fuqarolik pozitsiyasi kabi omillarni birlashtirish orqali amalga oshiriladi."},
-{q: "Ta’lim jarayonining mohiyatini qayta konseptuallashtirish deganda nimani nazarda tutdingiz?", a: "Axborot iste’moli madaniyatini rivojlantirishni shunchaki texnik ko‘nikma emas, balki kognitiv va affektiv neyropedagogika bilan uyg‘unlashgan yaxlit pedagogik jarayon sifatida yangitdan asoslashdir."},
-{q: "Ta’limiy va pedagogik mazmun predmetda qanday aks etadi?", a: "Bu — yoshlarga qanday bilim berish (ta’limiy) va ularda qanday tarbiyaviy sifatlarni (pedagogik) shakllantirish kerakligini belgilovchi asosiy mazmundir."},
-{q: "Tadqiqot natijalari o‘qituvchi tayyorlash tizimida qanday qo‘llanilishi mumkin?", a: "Malaka oshirish kurslari va pedagogika oliygohlarida bo‘lajak o‘qituvchilarga Axborot madaniyatini shakllantirish metodikasi sifatida o‘qitilishi mumkin."},
-{q: "Tadqiqot natijalari qayerda aprobatsiyadan o‘tkazildi?", a: "Tanlab olingan tajriba-sinov maktablarida (Samarqand, Sirdaryo va Qashqadaryo viloyatlaridagi maktablarda)."},
-{q: "Tadqiqot natijalaringizning ishonchliligi nimalarga asoslangan?", a: "Natijalarning ishonchliligi metodik yechimlarning ilmiy-nazariy asoslangani, model va tavsiyalarning amaliyotga tizimli joriy etilgani hamda matematik-statistik usullar orqali tasdiqlangani bilan belgilanadi."},
-{q: "Tadqiqot natijalarining amaliy ahamiyati nimada?", a: "Amaliy ahamiyat o‘quv jarayoni va sinfdan tashqari faoliyat uchun tayyor metodik model, didaktik materiallar majmuasi va multimedia resurslarining ishlab chiqilgani bilan izohlanadi."},
-{q: "Tadqiqot obyekti metodik-didaktik jarayon bo‘lsa, uni qanday o‘lchadingiz?", a: "Bu jarayonning samaradorligi o‘quvchilarning axborotni saralash, tahlil qilish va baholash ko‘nikmalarining oshishi orqali o‘lchandi."},
-{q: "Tadqiqot obyekti nima deb o‘ylaysiz? (Matndan kelib chiqib)", a: "Yoshlarda axborot iste’moli madaniyatini rivojlantirish jarayoni."},
-{q: "Tadqiqot predmeti sizning ilmiy yangiligingiz uchun poydevor bo'la oladimi?", a: "Albatta, chunki biz ishlab chiqadigan yangi model va amaliy mexanizmlar aynan shu predmet doirasida yaratiladi."},
-{q: "Tadqiqot usullari o‘rtasidagi mantiqiy bog‘liqlik qanday?", a: "Dastlab nazariy usullar bilan poydevor qurildi, diagnostika orqali muammo aniqlandi, eksperimentda yechim sinab ko‘rildi va statistik usul bilan yakuniy natija tasdiqlandi."},
-{q: "Tadqiqotda H_0 va H_1 gipotezalari nima uchun shakllantirildi?", a: "H_0 (nol gipoteza) — guruhlar o‘rtasida farq yo‘q deb hisoblaydi. $H_1$ (muqobil gipoteza) — tajriba natijasida samaradorlik mavjudligini anglatadi. Hisob-kitoblar natijasida $H_1$ gipotezasi tasdiqlandi."},
-{q: "Tadqiqotda ishtirok etgan 365 o‘quvchining yosh toifasi qanday?", a: "Ular maktab ta’limining yuqori sinf o‘quvchilari bo‘lib, axborotni ongli qabul qilish yoshidagi kontingentdir."},
-{q: "Tadqiqotingiz natijalari asosida o‘qituvchilar malakasini oshirish bo‘yicha qanday aniq taklifingiz bor?", a: "Tavsiyamizning 4-bandiga binoan, o‘qituvchilar uchun maxsus Mediasavodxonlik va raqamli pedagogika kurslarini yo‘lga qo‘yish zarur. O‘qituvchining o‘zi bu borada malakali bo‘lmas ekan, o‘quvchida bu madaniyatni shakllantirish qiyin kechadi."},
-{q: "Tadqiqotingiz natijalari faqat 2020 va 2021 yillarda joriy etilganmi?", a: "Matnda keltirilgan rasmiy ma'lumotnomalar 2020-2021 yillarga tegishli, biroq ularning natijalari va ishlab chiqilgan metodikalar hozirgi kunda ham ta'lim jarayonida qo'llanilib kelmoqda."},
-{q: "Tadqiqotingiz natijasida yoshlarda qanday yakuniy ko‘nikma shakllanadi?", a: "Axborot ummonida mustaqil yo‘l topa olish, ma’lumotni saralash va undan ongli ravishda o‘z rivojlanishi uchun foydalanish ko‘nikmasi."},
-{q: "Tadqiqotingiz qaysi yirik davlat dasturi yoki konsepsiyasiga bevosita bog‘liq? ", a: "O‘zbekiston Respublikasi Xalq ta’limi tizimini 2030-yilgacha rivojlantirish konsepsiyasiga (PF-5712) hamda Uzluksiz ma’naviy tarbiya konsepsiyasiga (1059-sonli qaror)."},
-{q: "Tadqiqotingiz respublika fan va texnologiyalari rivojlanishining qaysi ustuvor yo‘nalishiga kiradi?", a: "I-yo‘nalish: “Axborotlashgan jamiyat va demokratik davlatni ijtimoiy, madaniy va ma’naviy-ma’rifiy rivojlantirish” yo‘nalishiga."},
-{q: "Tadqiqotingizda fuqarolik pozitsiyasi axborot iste'moli bilan qanday bog'langan?", a: "O'quvchining axborot muhitidagi faoliyati jamiyat manfaatlariga xizmat qilishi va ijtimoiy mas'uliyatni his qilishi orqali bog'langan."},
-{q: "Tadqiqotingizda intervyu usuli nima uchun kerak bo‘ldi?", a: "Yoshlarning axborot iste’moli drayverlarini, ularning ijtimoiy tarmoqlardagi real qiziqishlari va motivatsiyasini chuqurroq aniqlash uchun foydalanildi."},
-{q: "Tadqiqotingizda ijtimoiy barqarorlik masalasi qanday yoritilgan?", a: "Yoshlarning axborotni to‘g‘ri tahlil qilishi va manipulyatsiyaga uchramasligi jamiyatda turli nizolarning oldini olishi va barqarorlikni ta’minlashi tahlil qilingan."},
-{q: "Tadqiqotingizda qanday asosiy usullar guruhidan foydalandingiz?", a: "Tadqiqotda to‘rt guruh usullardan foydalanildi: nazariy, diagnostik, tajribaviy va matematik-statistik usullar."},
-{q: "Tadqiqotingizda ushbu to‘rtta olimning fikrlari o‘zaro qarama-qarshimi yoki bir-birini to‘ldiradimi?", a: "Ular bir-birini to‘ldiradi. Biz ularni tizimlashtirib, o‘quvchi yoshlar uchun eng maqbul bo‘lgan Gibrid metodologiyani yaratdik."},
-{q: "Tadqiqotingizning asosiy xulosasi nima? Siz yoshlarda axborot iste’moli madaniyatini shunchaki bilim deb hisoblaysizmi?", a: "Yo‘q, tadqiqotimizning 2-bandida ta’kidlanganidek, axborot iste’moli madaniyati shunchaki bilim manbai emas, balki shaxs kamolotini ta’minlovchi ijtimoiy va axloqiy jarayondir. Uning asosiy maqsadi yoshlarda ma’naviy immunitet va axloqiy javobgarlikni shakllantirishdir."},
-{q: "Tadqiqotingizning eng asosiy amaliy mahsuli nima?", a: "Yoshlarda axborot iste’moli madaniyatini rivojlantiruvchi metodik-didaktik modelning funksional strukturasi."},
-{q: "Tadqiqotingizning ilmiy ahamiyati nimalarda namoyon bo‘ladi?", a: "Ilmiy ahamiyat ta’lim jarayoni mohiyatini qayta konseptuallashtirish, axborotni ongli qabul qilish mexanizmlarini modellashtirish va o‘quvchi sub’yektligini faollashtiruvchi strategik yondashuvlarni ishlab chiqishda namoyon bo‘ladi."},
-{q: "Tadqiqotingizning ilmiy gipotezasiga ko‘ra, ta’lim jarayonida axborot faoliyati qanday tashkil etilmasligi kerak?", a: "Axborot faoliyati faqat ma’lumot yetkazish vositasi sifatida tashkil etilmasligi kerak."},
-{q: "Tadqiqotingizning natijasi kimlar uchun foydali?", a: "Tadqiqot natijalari maktab va OTM pedagoglari, ota-onalar hamda axborot siyosati bilan shug‘ullanuvchi mutaxassislar uchun metodik asos bo‘lib xizmat qiladi."},
-{q: "Tadqiqotingizning predmeti nima?", a: "Yoshlarda axborot iste’moli madaniyatini rivojlantirish jarayonida shakllanadigan metodik-didaktik ta’minotning mazmuni, modellari, texnologiyalari va amaliy mexanizmlari."},
-{q: "Tadqiqotning qaysi amaliy yutug‘i o‘qituvchilar ishini osonlashtiradi?", a: "Tayyor integrativ ssenariylar va didaktik topshiriqlar majmuasi o'qituvchilarning darsga tayyorgarlik vaqtini qisqartiradi va dars sifatini oshiradi."},
-{q: "Tahliliy usulda o‘zlashtirish deganda aynan qaysi metod nazarda tutilgan?", a: "Axborotni qismlarga ajratish, dalillarni tekshirish va mantiqiy xatolarni topishga qaratilgan amaliy tahlil usullari."},
-{q: "Tajriba boshida (kirish nazorati) guruhlarning holati qanday edi?", a: "Tajriba boshida nazorat guruhi tajriba guruhidan yuqoriroq natijaga ega edi. Masalan, 5 baho ko‘rsatkichi nazorat guruhida 25,0%, tajriba guruhida esa 19,9% ni tashkil etgan."},
-{q: "Tajriba boshidagi holat haqida nima deya olasiz?", a: "Tajriba boshida ko'rsatkichlar mos ravishda $2.50$ va $2.80$ bo'lib, samaradorlikka erishilmagan edi. Bu esa tajriba yakunidagi ijobiy o'zgarishlar aynan biz qo'llagan metodik modelning natijasi ekanligini anglatadi."},
-{q: "Tajriba guruhida (181 nafar) o‘sish ko‘rsatkichlari nazorat guruhidan (184 nafar) sezilarli farq qilganini raqamlarsiz qanday izohlaysiz?", a: "Tajriba guruhidagi o‘quvchilar axborotni emotsional (shoshqaloqlik bilan) emas, balki mantiqiy-daliliy tahlil (faktcheking) asosida saralashni odatga aylantirdilar. Nazorat guruhida esa bunday tizimli o‘zgarish kuzatilmadi."},
-{q: "Tajriba guruhida o‘sish dinamikasi qanday bo‘ldi?", a: "(Matndan kelib chiqib): Tajriba guruhida axborotni saralash va baholash ko‘nikmalari nazorat guruhiga nisbatan statistik jihatdan sezilarli darajada (masalan, $15-20\%$) yuqori bo‘ldi."},
-{q: "Tajriba guruhida sifat ko‘rsatkichi (5 va 4 baholar yig‘indisi) qanchaga o‘sdi?", a: "Sifat ko‘rsatkichi tajriba boshidagi 50,8%dan tajriba yakunida 70,0%ga ko‘tarildi. Umumiy o‘sish 19,2%ni tashkil etdi."},
-{q: "Tajriba ishlari qanday bosqichlardan boshlangan?", a: "Tajribaning maqsadi, vazifalari, tahlil mezonlari, o‘lchov indikatorlari va baholash instrumentlarini belgilashdan boshlangan."},
-{q: "Tajriba jarayonida qo‘llangan kvest va keyslarning an’anaviy darslardan farqi nimada?", a: "An’anaviy darslarda axborot tayyor holda beriladi. Bizning metodikamizdagi kvest va keyslarda esa o‘quvchi axborotni o‘zi qidiradi, uning feyk ekanini tekshiradi va bu jarayonda uning axborot iste’moli madaniyati (kognitiv va amaliy komponentlari) faol rivojlanadi."},
-{q: "Tajriba o‘tkazilgan maktablar (12, 10, 94) bir-biridan nima bilan farq qiladi?", a: "Ular turli geografik hududlarda joylashgan bo‘lsa-da, barchasida bizning metodik-didaktik tizimimiz bir xil bosqichda sinovdan o‘tkazildi."},
-{q: "Tajriba sinovi -Nima uchun aynan maktab o‘quvchilari tanlangan?", a: "Chunki axborot iste’moli madaniyati poydevori aynan maktab davridan boshlab shakllantirilishi lozim bo‘lgan eng muhim kompetensiyadir."},
-{q: "Tajriba sinovi- Siz o‘tkazgan amaliyotning takomillashtirilgan jihati nimada?", a: "Biz an’anaviy dars jarayoniga yangi metodik-didaktik yechimlarni kiritish orqali axborotni to‘g‘ri iste’mol qilish jarayonini takomillashtirdik."},
-{q: "Tajriba yakunida 5 baho olgan o‘quvchilar ko‘rsatkichi qanday o‘zgardi?", a: "Tajriba guruhida 5 baholar 19,9%dan 30,56%ga ko‘tarildi (10,66% sof o‘sish). Nazorat guruhida esa bu ko‘rsatkich 25,0%dan 20,56%ga pasaydi."},
-{q: "Tajriba yakunida o‘rtacha o‘zlashtirish ko‘rsatkichi qanchaga oshdi?", a: "Statistik tahlillarga ko'ra, tajriba guruhidagi o‘rtacha o‘zlashtirish nazorat guruhidagiga nisbatan 12,8% ga oshganligi aniqlandi."},
-{q: "Tajribangizda Styudentning $t$-mezoni natijasi qanday bo‘ldi va bu nima beradi?", a: "Tajribada Styudentning tanlanma mezoni $t = 3.23$ ga teng bo'ldi. Bu ko'rsatkich olingan natijalarning tasodifiy emasligini va taklif etilgan metodika statistik jihatdan ishonchli ekanini (odatda $p < 0.05$ yoki $p < 0.01$ darajasida) tasdiqlaydi."},
-{q: "Tajribaning ishonchliligini ta’minlash uchun jami nechta o‘quvchi qamrab olindi?", a: "Jami 365 nafar o‘quvchi ishtirok etdi. Ulardan 181 nafari tajriba, 184 nafari esa nazorat guruhiga kiritilgan (yakuniy hisob-kitobda har ikki guruhdan 180 nafardan tanlanma olingan)."},
-{q: "Tajribaning kognitiv komponentini aniqlashda nimalarga e’tibor qaratilgan?", a: "O‘quvchilarning axborotni ongli tanlashi, saralashi va faktcheking (ma’lumotni tekshirish) ko‘nikmalariga."},
-{q: "Tajriba-sinov ishlari natijalari haqiqatan ham tizimli joriy etilganini nima isbotlaydi?", a: "Maktablardan olingan dalolatnomalar, o‘quvchilarning yakuniy nazorat ishlari natijalari va dars ssenariylarining amaliyotga tatbiq etilgani."},
-{q: "Tajriba-sinov ishlari qancha vaqt davom etdi?", a: "Tajriba-sinov ishlari dissertatsiyaning metodologik talablariga muvofiq, natijalar tahlili aniq bo‘lgunga qadar bo‘lgan davrni o‘z ichiga oladi."},
-{q: "Tajriba-sinov ishlari qaysi hududlarda va qancha ishtirokchi bilan o‘tkazilgan?", a: "Tajriba Samarqand, Sirdaryo va Qashqadaryo viloyatlaridagi 3 ta maktabda, jami 365 nafar o‘quvchi ishtirokida amalga oshirilgan."},
-{q: "Tajriba-sinov ishlari qaysi komponentlarni aniqlashga qaratilgan diagnostika tizimi asosida tashkil etilgan?", a: "Kognitiv (tanlash, faktcheking), affektiv (munosabat, ehtiyotkorlik) va axloqiy (etik munosabat, ishonchlilikni baholash) komponentlarni aniqlashga qaratilgan."},
-{q: "Tajriba-sinov ishlarida matematik-statistik tahlilning o‘rni nimadan iborat?", a: "Olingan natijalarning tasodifiy emasligini isbotlash hamda tajribagacha va tajribadan so‘nggi holat o‘rtasidagi farqning ilmiy ishonchliligini tasdiqlash uchun."},
-{q: "Tajriba-sinov ishlarida qanday takomillashtirish amaliyoti qo‘llanildi?", a: "Axborot iste’moli madaniyatini shakllantirishga qaratilgan yangi metodik tavsiyalar va didaktik materiallarni dars jarayoniga tatbiq etish amaliyoti."},
-{q: "Tanqidiy-ta’limiy yo‘nalish (2-band) o‘quvchi sub’yektligini qanday oshiradi?", a: "O‘quvchi axborotga nisbatan Nima uchun?, Kim tomonidan?, Qanday maqsadda? degan savollarni berish orqali passiv ob’yektdan faol sub’yektga aylanadi."},
-{q: "Tavsiyalaringizda maktab, oila va jamoat tashkilotlari hamkorligi haqida yozgansiz. Buni amalda qanday tasavvur qilasiz?", a: "Bu hamkorlik platformasi orqali ota-onalar va o‘quvchilar uchun umumiy profilaktik treninglar va raqamli xavfsizlik bo‘yicha ma’rifiy loyihalarni amalga oshirish nazarda tutilgan. Zero, axborot madaniyati faqat maktab bilan cheklanib qolmasligi kerak."},
-{q: "TDPU loyihasida sizning nazariy-metodologik asoslaringizdan foydalanish natijasida nima ishlab chiqildi?", a: "Yoshlarda axborotni ongli qabul qilish, saralash va baholashni rivojlantiruvchi metodik-didaktik modelning funksional strukturasi ishlab chiqildi."},
-{q: "TDPU loyihasining ikkinchi qismida aynan qaysi takliflaringiz joriy etildi?", a: "Global axborot oqimlari va axborot xavfsizligi tahdidlarini pedagogik tahlil qilish hamda ularning ta’limiy ahamiyatini belgilash bo‘yicha takliflarimizdan foydalanildi."},
-{q: "Telekanal ssenariysida sizning qaysi metodik tavsiyalaringiz o‘z aksini topdi?", a: "Axborotni tanlab qabul qilish, tahlil qilish usullari va o‘quvchi faolligini kuchaytiruvchi mediata’lim elementlaridan foydalanilgan."},
-{q: "Telekanalga joriy etish natijasida baholash tizimida qanday yangilik qilindi?", a: "Axborot bilan ishlashni baholovchi indikatorlar, diagnostika uslublari va refleksiya varaqalari majmuasi ishlab chiqildi."},
-{q: "Telekanali  Nima uchun sizning ishingizdan aynan O'zbekiston tarixi telekanali foydalandi?", a: "Chunki tarixiy ma'lumotlarni tahlil qilishda ham faktcheking va manba ishonchliligini baholash ko'nikmasi juda muhim, bizning metodikamiz esa aynan shu muammoga yechim beradi."},
-{q: "Tizimli yondashuv deganda aynan nimani nazarda tutyapsiz?", a: "Axborotni qabul qilishdan boshlab, uni tahlil qilish, saralash va ma’naviy-axloqiy baholashgacha bo‘lgan barcha jarayonlarni bir butun tizim sifatida o‘rganganimizni."},
-{q: "To‘rtinchi yangiligingizda integrativ tarzda moslashtirish deganda nima nazarda tutilgan?", a: "Bu mediasavodxonlik darslarini alohida fan sifatida emas, balki mavjud fanlar (tarix, ona tili, tarbiya) mazmuniga singdirilgan holda o‘qitish metodikasidir."},
-{q: "To‘xtaxo‘jayeva ishlari sizning ishingiz bilan qayerda tutashadi?", a: "U axborot iste’moli psixologiyasini o‘rgangan. Biz esa bu psixologik asosni dars jarayoniga tatbiq etuvchi metodik modellarni yaratdik."},
-{q: "To‘xtaxo‘jayeva Raqamli pedagogik modellar (To‘xtaxo‘jayeva) sizning modelingizdan nima bilan farq qiladi? ", a: "Ular ko‘proq muhitni modellashtirgan, biz esa aynan o‘quvchi/talabaning iste’mol qilish harakatlarini tartibga soluvchi metodikani yaratdik. "},
-{q: "uchinchi bobining asosiy maqsadi nima?", a: "Uchinchi bob “Yoshlarda axborot iste’moli madaniyatini oshirish bo‘yicha tajriba-sinov ishlari” deb nomlanadi. Asosiy maqsad — ishlab chiqilgan metodik-didaktik yechimlarning samaradorligini aniqlash va natijalarni matematik-statistik tahlil qilishdir."},
-{q: "Uchinchi yangiligingizdagi neyropedagogik yondashuvning mohiyati nimada?", a: "Bu axborotni qabul qilishda inson miyasining neyrofiziologik xususiyatlarini, ya’ni diqqatni jamlash, xotira va axborot yuklamasining miyaga ta’sirini hisobga olgan holda o‘qitishdir."},
-{q: "UNESCO va OECD kabi tashkilotlar bu borada nimalarni o‘rganmoqda?", a: "Ular yoshlarning feykka moyilligi, manipulyativ kontent ta’siri va raqamli muhitdagi axloqiy faolligini tadqiq qilmoqdalar."},
-{q: "Ushbu bobda asosan nimalar tahlil qilingan va qanday mexanizmlar taklif etilgan?", a: "Bobda axborot iste’moli madaniyatini rivojlantirishning didaktik imkoniyatlari va tarbiyaviy yo‘nalishlari tahlil qilingan. Shuningdek, oshirish metodikasi takomillashtirilib, uni amaliyotga joriy etish mexanizmlari taklif qilingan."},
-{q: "Ushbu huquqiy asoslar tadqiqotingizning ishonchlilik darajasini qanday belgilaydi?", a: "Tadqiqotimizning davlat tomonidan qabul qilingan strategik hujjatlar va farmonlarga asoslangani uning ijtimoiy buyurtma ekanligini va amaliy ahamiyati yuqoriligini isbotlaydi."},
-{q: "Ushbu jadval sizning ikkinchi bobingizdagi metodik-didaktik model uchun qanday xizmat qildi?", a: "Biz modelimizning Maqsad blokiga ushbu jadvaldagi pedagogik natijalarni, Mazmun blokiga har ikki tomonning ijobiy g‘oyalarini kiritdik."},
-{q: "Ushbu joriy etish natijasida dars jarayoni uchun qanday amaliy materiallar yaratildi?", a: "Mediasavodxonlik, faktcheking va axborot xavfsizligiga oid integrativ ssenariylar hamda didaktik topshiriqlar tuzildi."},
-{q: "Ushbu tahdidlar sharoitida ta’lim tizimining asosiy vazifalari nimalardan iborat deb belgilandi?", a: "Tanqidiy fikrlashni, axborotni saralashni va axborot xavfsizligiga oid ongni shakllantirish zarurligi belgilandi."},
-{q: "Ushbu uchta metod birlashganda o'quvchining axborotga munosabati qanday o'zgaradi?", a: "O'quvchi axborotni emotsional emas, balki mantiqiy-daliliy tahlil (filtratsiya) asosida saralaydi, uning tuzilishini baholaydi (mediatahlil) va uni shaxsiy vijdon bilan uyg'unlashtiradi (etika)."},
-{q: "Vasko gumanitar OTM talabalari bo‘yicha qanday omillarni aniqlagan? ", a: "U axborot-psixologik xavfsizlikning kognitiv (aqliy) va emotsional (hissiy) omillarini alohida tadqiq qilgan."},
-{q: "Vazifada-3 qanday Metodik-didaktik model haqida gap boradi?", a: "Axborotni ongli qabul qilishdan boshlab, uni tahlil qilish va baholashgacha bo‘lgan bosqichlarni o‘z ichiga olgan pedagogik model."},
-{q: "Vazifadagi -2 global axborot oqimlari yoshlarga qanday ta’sir etadi?", a: "Ular yoshlar dunyoqarashini shakllantiradi yoki manipulyatsiya orqali chalg‘itadi. Biz bu ta’sirlarning pedagogik ahamiyatini o‘rgandik."},
-{q: "Vazifadagi -4 amaliy faoliyat usullariga misol keltiring.", a: "Bular — darsda yoki darsdan tashqari vaqtda o‘quvchilar bilan o‘tkaziladigan interaktiv o‘yinlar, keys-stadi va faktcheking mashqlari."},
-{q: "Vazifalaringiz izchilligi qanday belgilangan?", a: "Nazariy tahlildan (1-vazifa) boshlab, omillarni aniqlash (2-vazifa), model yaratish (3-vazifa) va amaliy tavsiyalar (4-vazifa) berishgacha bo‘lgan mantiqiy zanjir asosida."},
-{q: "viloyat Nima uchun aynan 3 ta turli viloyat tanlangan?", a: "Tadqiqot natijalarining ishonchliligi va reprezentativligini ta’minlash, turli hududiy muhitdagi o‘quvchilarning axborot iste’moli madaniyatini qiyosiy o‘rganish uchun."},
-{q: "Vizual tahlil usuli metodikangizda qanday o‘rin tutadi?", a: "Vizual tahlil orqali o‘quvchilar rasmlar, infografikalar va videolar orqali uzatiladigan yashirin ma’nolarni anglashni va ularni tanqidiy baholashni o‘rganadilar."},
-{q: "Vizual-verbal faollashtiruvchi vositalar deganda nimalarni nazarda tutdingiz?", a: "Axborotni ham ko‘rish (infografika, video), ham eshitish/o‘qish (matnli tahlil) orqali kompleks qabul qilishga yordam beruvchi vositalar."},
-{q: "Vizual-verbal faollashtiruvchi vositalarga nimalar kiradi?", a: "Axborotni tahlil qilishga yordam beruvchi infografikalar, interaktiv kartalar va tushuntiruvchi videoroliklar."},
-{q: "Xalqaro tajribalarni shunchaki umumlashtirishmi?", a: "Yo‘q, biz xalqaro tajribadagi eng yaxshi elementlarni (masalan, faktcheking va raqamli etika) olib, ularni o‘zimizning pedagogik muhitimiz va qadriyatlarimiz asosida yangi metodik tizimga aylantirdik."},
-{q: "Xobbs-AQSHlik olima R.Xobbsning mediasavodxonlikka yondashuvida asosiy urg‘u nimaga qaratilgan?", a: "R.Xobbs axborotni tanlab qabul qilish, manba ishonchliligini baholash va axborot immunitetini shakllantirish prinsiplarini asosiy o‘ringa qo‘ygan."},
-{q: "Xobbsning axborot immuniteti tushunchasi sizning ishingizga qanchalik mos keladi?", a: "Bu tushuncha bizning tadqiqotimizning maqsadi bilan to‘la mos keladi, biz uni o‘z milliy ta’lim tizimimizga moslashtirilgan holda rivojlantirdik."},
-{q: "Xorijda media literacy (media savodxonlik) atamasi ko‘proq ishlatiladi?", a: "Chunki G‘arbda axborot asosan media (TV, internet, ijtimoiy tarmoq) orqali tarqalishi va uning texnik xususiyatlariga ko‘proq urg‘u beriladi. Bizda esa madaniyat so‘zi orqali uning tarbiyaviy ildizlari qamrab olinadi."},
-{q: "Xorijiy metodologiyada ijtimoiy-konstruktiv yondashuv ustuvor?", a: "Chunki bu yondashuvda bilim tayyor holda berilmaydi, balki o‘quvchi axborot muhitida boshqalar bilan muloqot va hamkorlik orqali o‘z tushunchalarini quradi (constructs). Biz buni o‘z modelimizda interaktiv metodlar orqali joriy etdik."},
-{q: "Xorijiy olimlar ta’rifida milliy omillar yetarlicha qamrab olinmagan deb hisoblaysiz?", a: "G‘arb metodologiyasida (Kastels, Zurov) ko‘proq universal insoniy huquqlar va texnik erkinlikka urg‘u beriladi. Sharq pedagogikasida esa tarbiya va andisha filtrlari ustuvor. Biz aynan shu milliy filtrni tadqiqotimizga kiritdik."},
-{q: "Xorijiy tadqiqotlardagi fuqarolik faolligi (civic engagement) bizning milliy sharoitimizda qanday transformatsiya qilinadi?", a: "Xorijda bu ko‘proq siyosiy-ijtimoiy huquqlardan foydalanishni anglatsa, bizning sharoitimizda u ijtimoiy mas’uliyat ko‘rinishida namoyon bo‘ladi. Ya’ni, axborotni tarqatishda jamiyat barqarorligi va milliy manfaatlarni his etish faolligi sifatida transformatsiya qilinadi."},
-{q: "Xorijiy va mahalliy olimlar qarashlari qanday sintez qilingan? ", a: "Xorijiy olimlarning faktcheking texnologiyalari mahalliy olimlarimizning milliy-ma’naviy tarbiya borasidagi g‘oyalari bilan birlashtirildi."},
-{q: "Yangi O‘zbekiston strategiyasi kitobidagi g‘oyalar bilan hamohangmi?", a: "Ha, kitobning 54-betida ta’kidlanganidek, yoshlarni axborot xurujlaridan himoya qilish bugungi kunning eng dolzarb vazifasi sifatida bizning ishimizda ilmiy asoslab berilgan."},
-{q: "Yangiliklaringiz bir-birini qanday to‘ldiradi?", a: "1-yangilik nazariy asosni, 2-yangilik imkoniyat va mezonlarni, 3-yangilik modelni (tizimni), 4-yangilik esa amaliy metodikani taqdim etadi."},
-{q: "Yangiliklaringizda dezinformatsiya masalasiga nega bunchalik katta urg‘u berilgan?", a: "Chunki hozirgi post-haqiqat (post-truth) davrida yoshlar uchun eng katta xavf — bu noto‘g‘ri ma’lumotlar orqali ongning manipulyatsiya qilinishidir."},
-{q: "Yevropa Ittifoqi komissiyasining ilmiy hisoboti ishingizda qanday rol o‘ynadi?", a: "Biz ushbu hisobotda ishlab chiqilgan yoshlarda kritik fikrlashni shakllantirish indikatorlari tizimidan o‘z tadqiqotimizda o‘lchov mezoni sifatida foydalandik."},
-{q: "Yevropa Ittifoqining mediasavodxonlik bo‘yicha ko‘rsatkichlari haqida nima deya olasiz?", a: "Yevropa Ittifoqida mediasavodxonlik darajasini o‘lchash uchun 30 dan ortiq maxsus milliy indikatorlar ishlab chiqilgan."},
-{q: "Yoshlarda axborot iste’moli madaniyatini rivojlantirish jarayonini tashkil etishning qanday asoslari yoritilgan?", a: "Uni metodik-didaktik jihatdan tashkil etishning ilmiy asoslari yoritilgan."},
-{q: "Yoshlarda tanqidiy fikrlash va ma’naviy immunitetni rivojlantirish uchun qanday tarkibiy qismlarni uyg‘unlashtirish zarur ekanligi ilmiy asoslangan?", a: "Axborot bilan ishlashda kognitiv, affektiv va axloqiy tarkibiy qismlarni uyg‘unlashtirish zarur omil ekani ilmiy asoslangan."},
-{q: "Zamonaviy pedagogik paradigmalar deganda birinchi bobda qaysi yo‘nalishlarni asos qilib oldingiz?", a: "Asosan konstruktivizm (o‘quvchi bilimlarni mustaqil qurishi), shaxsga yo‘naltirilgan ta’lim va kompetensiyaviy yondashuv. Shuningdek, axborot oqimini tahlil qilishda kognitiv psixologiya tamoyillaridan foydalandik."},
-{q: "Zamonaviy pedagogik paradigmalar deganda qaysi birini nazarda tutdingiz?", a: "Asosan shaxsga yo‘naltirilgan (person-centered) va kompetensiyaviy (competency-based) paradigmalarni nazarda tutdik."},
-{q: "Zamonaviy ta’lim sharoitida axborot iste’moli madaniyatini rivojlantirish masalasi nazariy yondashuvdan tashqari yana nimani aniq belgilashni talab qiladi?", a: "Uning didaktik va tarbiyaviy asoslarini aniq belgilashni talab qiladi."},
-{q: "Nima uchun statistik tahlilda Styudentning t-kriteriysidan foydalanildi?", a: "Ikki mustaqil bosh to‘plam (tajriba va nazorat guruhlari) o‘rtasidagi o‘rtacha ballar farqi statistik jihatdan ahamiyatli ekanini isbotlash uchun. Bunda ballar taqsimoti normal deb hisoblandi."},
-{q: "Nizomov axborot madaniyatini nima bilan bog‘liq holda o‘rgangan?", a: "U global fikrlashni rivojlantirish va yoshlarda axborotni tahlil qilish ko‘nikmalarini shakllantirish masalalarini yoritgan."},
-{q: "O‘qitish samaradorligini baholash mezoni ($K_{ef}$) va bilish darajasi mezoni ($K_{bil}$) natijalari qanday?", a: "Hisob-kitoblarimizga ko'ra, o‘qitish samaradorligi mezoni birdan katta ($K_{ef} > 1$) va bilish darajasini baholash mezoni noldan katta ($K_{bil} > 0$) bo'ldi. Bu tajriba guruhidagi o'zlashtirish nazorat guruhidan ustun ekanligining matematik isbotidir."},
-{q: "O‘quvchi axborot faolligini baholovchi mezonlar nimalardan iborat?", a: "Axborotni qanchalik tez saralay olishi, tahlilining chuqurligi va axborotdan foydalanishda axloqiy me’yorlarga rioya qilishi."},
-{q: "O‘quvchi sub’yektligini faollashtirish ishingizda qanday ilmiy yangilik beradi?", a: "O‘quvchi axborotning passiv obyekti emas, balki uni mustaqil saralovchi va baholovchi faol sub’yektga aylanishi mexanizmini nazariy jihatdan ochib berdik."},
-{q: "O‘quvchilarda tanqidiy fikrlash qanday yo‘l bilan kuchaytiriladi?", a: "Axborot faoliyatining ijodiy yo‘naltirilishi orqali kuchaytiriladi."},
-{q: "O‘quvchilarning kognitiv faolligini kuchaytirish uchun ta'lim amaliyotiga qanday usullarni joriy etish imkoniyatlari asoslab berilgan?", a: "Mediatahlil, manba tekshirish, saralash va faktlarni solishtirish kabi usullarni ta’lim amaliyotiga joriy etish imkoniyatlari asoslab berilgan."},
-{q: "Obyekt - Nima uchun obyekt sifatida aynan ta’lim jarayoni tanlandi?", a: "Chunki axborot iste’moli madaniyati o‘z-o‘zidan shakllanmaydi, u tizimli metodik va didaktik yondashuvga asoslangan ta’lim jarayonida shakllanadi."},
-{q: "Obyekt bilan predmetning farqini aynan sizning ishingiz misolida tushuntiring.", a: "Obyekt — bu umumiy ta’lim jarayoni bo‘lsa, predmet — shu jarayon ichidagi aynan metodik-didaktik ta’minot va mexanizmlardir."},
-{q: "Obyekti - Tadqiqotingizning obyekti nima?", a: "Yoshlarda axborot iste’moli madaniyatini rivojlantirishga qaratilgan metodik-didaktik ta’lim jarayonini takomillashtirish amaliyoti."},
-{q: "Olimlar ko‘rsatgan g‘oyaviy immunitet bilan siz aytayotgan axborot madaniyati qanday aloqador? ", a: "Axborot madaniyati yuksak bo‘lgan yoshlarda g‘oyaviy immunitet tabiiy ravishda kuchli bo‘ladi, chunki u axborotni filtrlay oladi."},
-{q: "OECD, UNESCO kabi tashkilotlar va Civic Online Reasoning kabi loyihalarni keltirgansiz. Ularning yondashuvlarida aynan qaysi jihat sizning tadqiqotingiz uchun asos bo'lib xizmat qildi?", a: "Ushbu tashkilotlar va loyihalardan ikki muhim jihatni asos qilib oldim: Faktcheking konikmalari: AQSHning Civic Online Reasoning loyihasidagi oquvchilarda malumotni tekshirish metodikasini. Milliy indikatorlar: Yevropa Ittifoqining mediasavodxonlik boyicha 30 dan ortiq korsatkichlarini (indikatorlarini). Bu tajribalar asosida biz yoshlarda axborotni shunchaki qabul qilish emas, balki uni tahlil qilish va tanlab istemol qilish mexanizmini ishlab chiqdik."},
-{q: "Jadval 1-jadvalda keltirilgan qiyosiy tahlilingizning eng muhim xulosasi nima?", a: "Asosiy xulosa shundan iboratki, texnik savodxonlik axborot madaniyati uchun faqat 'poydevor' bo‘lib xizmat qiladi, lekin uning o‘rnini bosa olmaydi. Biz ta’limda faqat 'tugmalarni bosish'ni emas, balki 'fikrlash'ni o‘rgatishimiz kerakligini isbotladik."},
-{q: "2019-yil 31-dekabrdagi 1059-sonli qarorning ishingizga qanday aloqasi bor?", a: "Bu 'Uzluksiz ma’naviy tarbiya konsepsiyasi' bo‘lib, unda belgilangan yoshlarda axloqiy-ma’naviy immunitetni kuchaytirish vazifasi bizning tadqiqotimizning negizini tashkil qiladi."},
-{q: "2-band Affektiv ko‘rsatkichlarni ball bilan emas, 'sifat bahosi' bilan o‘lchashingizning sababi nimada?", a: "Insonning ichki kechinmalari, vijdoni va axloqiy munosabatini raqamlar bilan o‘lchash pedagogik jihatdan to‘g‘ri emas. Shuning uchun biz 'ijobiy, betaraf yoki salbiy' kabi sifat o‘lchovlaridan foydalandik."},
-{q: "Nima uchun aynan 365 nafar o‘quvchi tanlandi? Bu son reprezentativlikni ta’minlaydimi?", a: "Ha, 365 nafar o‘quvchi tanlanishi pedagogik tajriba-sinov ishlari uchun yetarli miqdor hisoblanadi va olingan natijalarning ilmiy asosli ekanligini ta’minlashga xizmat qiladi."},
-{q: "6-bandda shaxsga ta'siri bo‘yicha farqni tushuntiring. Savodxonlik ijtimoiy ongni shakllantirmaydimi?", a: "Axborot savodxonligi ko‘proq kognitiv jarayonlar bilan ishlaydi. Ijtimoiy va axloqiy ong esa faqat axborot madaniyati orqali shakllanadi, chunki bu darajada shaxs axborotning jamiyatga ta’siri uchun mas’uliyatni his qiladi."},
-{q: "Nega 'Axborot iste’moli madaniyati' atamasini tanladingiz?", a: "Chunki raqamli transformatsiya davrida global media strategiyalar yoshlar ongiga kuchli ta’sir o‘tkazmoqda. Bu madaniyatni shakllantirish yoshlarni manipulyatsiyadan himoya qilishning yagona yo‘lidir."},
-{q: "Abduraxmonov ta’rifida 'ijtimoiy jihatlar' kam yoritilgan deb topdingiz?", a: "Chunki ushbu ta’rifda asosiy e’tibor shaxsning ichki axloqiy mas’uliyatiga qaratilgan. Biz o‘z ishimizda virtual jamoalar va global kommunikatsiya kabi ijtimoiy aloqalarni ham tizimlashtirdik."},
-{q: "Affektiv komponentni rivojlantirish nega muhim?", a: "Yoshlar axborotni ko‘pincha mantiq bilan emas, his-tuyg‘u bilan qabul qilishadi. Bu komponent emotsiyalarni boshqara olishni o'rgatadi."},
-{q: "Amaliyotga joriy etishda nima uchun 'adaptiv yondashuv' zarur?", a: "Chunki o‘quvchilarning yoshi, individual ehtiyojlari va dezinformatsiyaga moyillik omillari turlicha bo‘ladi."},
-{q: "Faktcheking ko‘nikmasini o‘quvchilarda shakllantirishning ahamiyati nimada?", a: "Bu o‘quvchiga axborotning ishonchliligini mustaqil tekshirish imkonini beradi va manipulyatsiya qurboni bo‘lishdan asraydi."}
+            { q: "Jadval 1-jadvalda keltirilgan qiyosiy tahlilingizning eng muhim xulosasi nima?", a: "Asosiy xulosa shundan iboratki, texnik savodxonlik axborot madaniyati uchun faqat poydevor bo‘lib xizmat qiladi, lekin uning o‘rnini bosa olmaydi." },
+            { q: "2019-yil 31-dekabrdagi 1059-sonli qarorning ishingizga qanday aloqasi bor?", a: "Bu uzluksiz ma’naviy tarbiya konsepsiyasi bo‘lib, unda belgilangan vazifalar tadqiqot negizini tashkil qiladi." },
+            { q: "Axborot iste’moli madaniyati shakllangan o‘quvchi qanday sifatlarga ega bo‘ladi?", a: "U axborotni manbasini tekshiradi, feykni ajratadi, raqamli etikaga amal qiladi va axborotdan ma’naviy-ma’rifiy maqsadlarda foydalanadi." },
+            { q: "Axborotni ongli qabul qilish qanday amalga oshiriladi?", a: "Yoshlarning har qanday ma’lumotga tanqidiy ko‘z bilan qarashi va uning ishonchliligini tekshirishi orqali." },
+            { q: "Faktcheking ko‘nikmasini o‘quvchilarda shakllantirishning pedagogik ahamiyati nimada?", a: "Bu o‘quvchiga axborotning ishonchliligini mustaqil tekshirish imkonini beradi va uni manipulyatsiyalar qurboniga aylanishdan asraydi." }
+
+            // ESKI FAYLINGIZDAGI BARCHA QA DATA NI SHU YERGA TO‘LIQ QO‘YING
         ];
 
-        const searchInput = document.getElementById('searchInput');
-        const resultsContainer = document.getElementById('results');
-        const noResultsMsg = document.getElementById('noResults');
-        const countInfo = document.getElementById('countInfo');
-        const micBtn = document.getElementById('micBtn');
+        const searchInput = document.getElementById("searchInput");
+        const resultsContainer = document.getElementById("results");
+        const noResultsMsg = document.getElementById("noResults");
+        const countInfo = document.getElementById("countInfo");
+        const micBtn = document.getElementById("micBtn");
 
-        // Web Speech API sozlamalari
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        let recognition;
+        let recognition = null;
         let isRecording = false;
 
-        if (SpeechRecognition) {
-            recognition = new SpeechRecognition();
-            recognition.lang = 'uz-UZ'; // O'zbek tiliga sozlash
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
-
-            recognition.onstart = function() {
-                isRecording = true;
-                micBtn.classList.add('recording');
-                searchInput.placeholder = "Eshitmoqdaman...";
-            };
-
-            recognition.onresult = function(event) {
-                const transcript = event.results[0][0].transcript;
-                searchInput.value = transcript;
-                searchQA(); // Natija olingach avtomat qidirish
-            };
-
-            recognition.onspeechend = function() {
-                recognition.stop();
-            };
-
-            recognition.onend = function() {
-                isRecording = false;
-                micBtn.classList.remove('recording');
-                searchInput.placeholder = "Kalit so'zni yozing...";
-            };
-
-            recognition.onerror = function(event) {
-                console.error("Speech Recognition Error:", event.error);
-                isRecording = false;
-                micBtn.classList.remove('recording');
-                searchInput.placeholder = "Xatolik yuz berdi yoki ruxsat yo'q.";
-            };
-        } else {
-            micBtn.style.display = 'none'; // Brauzer qo'llab-quvvatlamasa mikrofon yashiriladi
-        }
-
-        function toggleSpeechRecognition() {
-            if (!recognition) return;
-            if (isRecording) {
-                recognition.stop();
-            } else {
-                recognition.start();
-            }
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
         }
 
         function highlightText(text, query) {
             if (!query) return text;
-            const regex = new RegExp(`(${query})`, 'gi');
+            const safeQuery = escapeRegExp(query);
+            const regex = new RegExp(`(${safeQuery})`, "gi");
             return text.replace(regex, '<span class="highlight">$1</span>');
         }
 
         function displayData(data, query) {
-            resultsContainer.innerHTML = '';
-            
-            if (data.length === 0 && query !== '') {
-                noResultsMsg.style.display = 'block';
+            resultsContainer.innerHTML = "";
+
+            if (query === "") {
+                noResultsMsg.style.display = "none";
+                countInfo.innerText = `Kalit so'zni kiriting (jami: ${qaData.length} savol)`;
+                return;
+            }
+
+            if (data.length === 0) {
+                noResultsMsg.style.display = "block";
                 countInfo.innerText = "Hech narsa topilmadi.";
                 return;
-            } else {
-                noResultsMsg.style.display = 'none';
             }
 
-            if (query === '') {
-                countInfo.innerText = "Kalit so'zni kiriting (jami: " + qaData.length + " savol)";
-                return;
-            }
-
-            countInfo.innerText = data.length + " ta mos keladigan javob topildi.";
+            noResultsMsg.style.display = "none";
+            countInfo.innerText = `${data.length} ta mos keladigan javob topildi.`;
 
             data.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'qa-card';
+                const div = document.createElement("div");
+                div.className = "qa-card";
                 div.innerHTML = `
                     <div class="question">${highlightText(item.q, query)}</div>
                     <div class="answer">${highlightText(item.a, query)}</div>
@@ -692,17 +276,132 @@
 
         function searchQA() {
             const query = searchInput.value.trim().toLowerCase();
-            
-            const filteredData = qaData.filter(item => 
-                item.q.toLowerCase().includes(query) || 
+
+            const filteredData = qaData.filter(item =>
+                item.q.toLowerCase().includes(query) ||
                 item.a.toLowerCase().includes(query)
             );
 
             displayData(filteredData, query);
         }
 
-        // Boshlang'ich holat
-        displayData([], '');
+        async function requestMicPermission() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                throw new Error("MEDIA_DEVICES_UNSUPPORTED");
+            }
+            return await navigator.mediaDevices.getUserMedia({ audio: true });
+        }
+
+        function setIdleState(message = "Baza tayyor. Qidiruvni boshlang.") {
+            isRecording = false;
+            micBtn.classList.remove("recording");
+            searchInput.placeholder = "Kalit so'zni yozing...";
+            countInfo.innerText = message;
+        }
+
+        function setupSpeechRecognition() {
+            if (!SpeechRecognition) {
+                micBtn.style.display = "none";
+                countInfo.innerText = "Brauzeringiz ovozli qidiruvni qo‘llab-quvvatlamaydi.";
+                return;
+            }
+
+            recognition = new SpeechRecognition();
+            recognition.lang = "uz-UZ";
+            recognition.interimResults = false;
+            recognition.continuous = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.onstart = () => {
+                isRecording = true;
+                micBtn.classList.add("recording");
+                searchInput.placeholder = "Eshitmoqdaman...";
+                countInfo.innerText = "Gapiring...";
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                searchInput.value = transcript;
+                searchQA();
+                countInfo.innerText = "Ovoz matnga aylantirildi.";
+            };
+
+            recognition.onspeechend = () => {
+                if (recognition) {
+                    recognition.stop();
+                }
+            };
+
+            recognition.onend = () => {
+                isRecording = false;
+                micBtn.classList.remove("recording");
+                searchInput.placeholder = "Kalit so'zni yozing...";
+            };
+
+            recognition.onerror = (event) => {
+                isRecording = false;
+                micBtn.classList.remove("recording");
+
+                let msg = "Ovozli qidiruvda xatolik yuz berdi.";
+
+                switch (event.error) {
+                    case "not-allowed":
+                        msg = "Mikrofonga ruxsat berilmagan.";
+                        break;
+                    case "audio-capture":
+                        msg = "Mikrofon topilmadi yoki ishlamayapti.";
+                        break;
+                    case "no-speech":
+                        msg = "Ovoz aniqlanmadi. Qayta urinib ko‘ring.";
+                        break;
+                    case "network":
+                        msg = "Tarmoq xatosi sabab ovoz tanilmadi.";
+                        break;
+                    case "aborted":
+                        msg = "Ovozli qidiruv to‘xtatildi.";
+                        break;
+                }
+
+                searchInput.placeholder = "Kalit so'zni yozing...";
+                countInfo.innerText = msg;
+                console.error("Speech Recognition Error:", event.error);
+            };
+        }
+
+        async function toggleSpeechRecognition() {
+            if (!recognition) {
+                alert("Bu brauzer ovozli qidiruvni qo‘llab-quvvatlamaydi.");
+                return;
+            }
+
+            if (isRecording) {
+                recognition.stop();
+                setIdleState("Ovozli qidiruv to‘xtatildi.");
+                return;
+            }
+
+            try {
+                micBtn.disabled = true;
+
+                const stream = await requestMicPermission();
+                stream.getTracks().forEach(track => track.stop());
+
+                recognition.start();
+            } catch (error) {
+                console.error("Microphone permission error:", error);
+
+                if (error.message === "MEDIA_DEVICES_UNSUPPORTED") {
+                    countInfo.innerText = "Brauzer mikrofon API ni qo‘llab-quvvatlamaydi.";
+                } else {
+                    countInfo.innerText = "Mikrofonga ruxsat kerak. Brauzerda Allow bosing.";
+                }
+            } finally {
+                micBtn.disabled = false;
+            }
+        }
+
+        setupSpeechRecognition();
+        displayData([], "");
     </script>
 </body>
 </html>
